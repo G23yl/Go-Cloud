@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .main {
+        max-width: 560px;
+        padding: 24px 24px 32px;
+        background-color: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 2px;
+      }
+      .code {
+        margin: 20px 0;
+        font-weight: bold;
+        font-size: 20px;
+        color: #4374e0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h1>Confirm your email address</h1>
+      <p>
+        Your confirmation code is below — enter it in your open browser window and we'll help you
+        get signed in.
+      </p>
+      <div class="code">{{ .Code }}</div>
+    </div>
+  </body>
+</html>

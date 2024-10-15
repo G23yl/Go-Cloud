@@ -2,6 +2,7 @@ package main
 
 import (
 	"disk/config"
+	"disk/database"
 	"disk/router"
 	"log"
 )
@@ -10,8 +11,8 @@ func main() {
 	// 初始化viper，加载配置
 	config.InitViper()
 	// 初始化数据库，mysql和redis
-	config.ConnectSql()
-	config.ConnectRedis()
+	database.ConnectSql()
+	database.ConnectRedis()
 	// 获取路由
 	router := router.SetUpRouter()
 

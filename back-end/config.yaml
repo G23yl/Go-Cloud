@@ -18,3 +18,10 @@ redis:
 jwt:
   secret: go-cloud
   expired: 24
+
+email:
+  host: smtp.qq.com
+  port: 587
+  username: 1265126315@qq.com
+  password: krxomzifaqvjghca
+  addr: http://localhost:8080

@@ -29,6 +29,13 @@ type Config struct {
 		Secret  string `yaml:"secret"`
 		Expired int    `yaml:"expired"`
 	}
+	Email struct {
+		Host     string `mapstructure:"host"`
+		Port     int    `mapstructure:"port"`
+		Username string `mapstructure:"username"`
+		Password string `mapstructure:"password"`
+		Address  string `mapstructure:"addr"`
+	}
 }
 
 var config Config
@@ -46,6 +53,34 @@ func GetRedisOptions() *redis.Options {
 	}
 }
 
+func GetServerHost() string {
+	return config.Server.Host
+}
+
 func GetServerPort() string {
 	return fmt.Sprintf(":%d", config.Server.Port)
+}
+
+func GetSecret() string {
+	return config.JWT.Secret
+}
+
+func GetExpired() int {
+	return config.JWT.Expired
+}
+
+func GetEmailFrom() string {
+	return config.Email.Username
+}
+
+func GetEmailHost() string {
+	return config.Email.Host
+}
+
+func GetEmailPort() int {
+	return config.Email.Port
+}
+
+func GetEmailPassword() string {
+	return config.Email.Password
 }
