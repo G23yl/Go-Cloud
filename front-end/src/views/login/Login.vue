@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import useUserStore from "@/store/user"
 import type { LoginForm } from "@/types/types"
-import { ElMessage } from "element-plus"
-import { reactive, ref } from "vue"
+import { ElMessage, type FormInstance, type FormRules } from "element-plus"
+import { reactive, ref, useTemplateRef } from "vue"
 import { useRouter } from "vue-router"
 
 const userInfo = reactive<LoginForm>({
@@ -12,18 +12,62 @@ const userInfo = reactive<LoginForm>({
 const userStore = useUserStore()
 const loading = ref(false)
 const router = useRouter()
+const loginFormRef = useTemplateRef<FormInstance>("loginFormRef")
+const rules = reactive<FormRules<LoginForm>>({
+  username: [
+    {
+      validator(rule, value, callback) {
+        if (!value) {
+          callback(new Error("Please enter your username"))
+        } else if (value.length < 4 || value.length > 10) {
+          callback(new Error("Username must be between 4 and 10 characters"))
+        } else {
+          callback()
+        }
+      },
+      trigger: "blur",
+    },
+  ],
+  password: [
+    {
+      validator(rule, value, callback) {
+        if (!value) {
+          callback(new Error("Please enter your password"))
+        } else if (value.length < 4 || value.length > 16) {
+          callback(new Error("Password must be between 4 and 16 characters"))
+        } else {
+          callback()
+        }
+      },
+      trigger: "blur",
+    },
+  ],
+})
 
-const handleSubmit = async (data: LoginForm) => {
+const handleSubmit = async () => {
   loading.value = true
-  const response = await userStore.login(data)
-  loading.value = false
-  // 登录成功提示信息以及跳转
-  if (response) {
-    router.push("/index")
-    ElMessage({
-      type: "success",
-      message: "Login successful!",
+  if (!loginFormRef.value) {
+    return
+  }
+  try {
+    await loginFormRef.value.validate((valid) => {
+      if (!valid) {
+        return Promise.reject()
+      }
+      return Promise.resolve()
     })
+    const response = await userStore.login(userInfo)
+    // 登录成功提示信息以及跳转
+    if (response) {
+      router.push("/index")
+      ElMessage({
+        type: "success",
+        message: "Login successful!",
+      })
+    }
+  } catch (error) {
+  } finally {
+    loading.value = false
   }
 }
 // 设置未完成功能的提示
@@ -48,31 +92,31 @@ const experiment = () => {
       </div>
       <div class="login-panel">
         <h2>Login</h2>
-        <form>
-          <label>
-            Username
-            <input type="text" v-model="userInfo.username" required minlength="4" maxlength="10" />
-          </label>
-          <label>
-            Password
-            <input
-              type="password"
-              v-model="userInfo.password"
-              required
-              minlength="4"
-              maxlength="10"
-            />
-          </label>
+        <el-form
+          ref="loginFormRef"
+          :model="userInfo"
+          status-icon
+          label-width="auto"
+          label-position="top"
+          size="large"
+          :rules="rules"
+        >
+          <el-form-item label="Username" prop="username">
+            <el-input v-model="userInfo.username"></el-input>
+          </el-form-item>
+          <el-form-item label="Password" prop="password">
+            <el-input v-model="userInfo.password" type="password" show-password></el-input>
+          </el-form-item>
           <el-button
             type="primary"
             size="large"
             class="login-button"
             :loading="loading"
-            @click="handleSubmit(userInfo)"
+            @click="handleSubmit"
           >
             Login
           </el-button>
-        </form>
+        </el-form>
         <div class="footer">
           <a href="#" @click="experiment">Forgot password?</a>
           <div class="social-login">
@@ -96,6 +140,7 @@ const experiment = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "PingFang SC";
 }
 
 .card {
@@ -207,6 +252,7 @@ input[type="password"]:focus {
   border-radius: 8px;
   cursor: pointer;
   font-size: 1.1em;
+  padding: 15px 0;
   margin-top: 20px;
   transition: background-color 0.3s;
 }
