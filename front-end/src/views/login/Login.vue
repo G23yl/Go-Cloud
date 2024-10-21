@@ -100,6 +100,7 @@ const experiment = () => {
           label-position="top"
           size="large"
           :rules="rules"
+          style="max-width: 420px; width: 100%"
         >
           <el-form-item label="Username" prop="username">
             <el-input v-model="userInfo.username"></el-input>
@@ -118,13 +119,36 @@ const experiment = () => {
           </el-button>
         </el-form>
         <div class="footer">
-          <a href="#" @click="experiment">Forgot password?</a>
+          <el-link
+            href="#"
+            type="primary"
+            @click="experiment"
+            :underline="false"
+            style="color: #a3c2c7"
+            >Forgot password?</el-link
+          >
           <div class="social-login">
             <span>or login with</span>
-            <button class="social-button" @click="experiment">QQ</button>
-            <button class="social-button" @click="experiment">WeChat</button>
+            <img
+              src="@/assets/QQ.svg"
+              alt="qq"
+              style="width: 25px; cursor: pointer; margin-right: 5px"
+              @click="experiment"
+            />
+            <span>or</span>
+            <img
+              src="@/assets/wechat-fill.svg"
+              alt="wechat"
+              style="width: 25px; cursor: pointer"
+              @click="experiment"
+            />
           </div>
-          <p>Don't have an account? <a href="/sign-up">Create Account</a></p>
+          <p>
+            Don't have an account?
+            <el-link href="/sign-up" type="primary" :underline="false" style="color: #a3c2c7"
+              >Create Account</el-link
+            >
+          </p>
         </div>
       </div>
     </div>
@@ -133,6 +157,8 @@ const experiment = () => {
 
 <style scoped>
 .container {
+  width: 700px;
+  height: 500px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -150,8 +176,7 @@ const experiment = () => {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   width: 100%;
-  max-width: 900px;
-  max-height: 700px;
+  max-height: 500px;
   transition: transform 0.3s ease;
 }
 
@@ -213,39 +238,8 @@ const experiment = () => {
   margin-bottom: 25px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 420px;
-}
-
-label {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-  font-size: 1em;
-  color: #444;
-}
-
-input[type="text"],
-input[type="password"] {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-top: 5px;
-  font-size: 1em;
-  transition: border-color 0.3s ease-in-out;
-  background-color: #f4f6f9;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border-color: #6a6afc;
-  outline: none;
-}
-
 .login-button {
+  width: 100%;
   background-color: #a3c2c7;
   color: #fff;
   border: none;
@@ -270,12 +264,6 @@ input[type="password"]:focus {
   color: #555;
 }
 
-.footer a {
-  color: #a3c2c7;
-  text-decoration: none;
-  margin-bottom: 10px;
-}
-
 .social-login {
   display: flex;
   align-items: center;
@@ -285,20 +273,5 @@ input[type="password"]:focus {
 .social-login span {
   margin-right: 10px;
   color: #777;
-}
-
-.social-button {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin: 0 8px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s;
-}
-
-.social-button:hover {
-  background-color: #f1f1f1;
 }
 </style>
