@@ -3,7 +3,11 @@
 import type { User } from "@/types/types"
 
 function getUser() {
-  return JSON.parse(localStorage.getItem("user") || "")
+  let user = localStorage.getItem("user")
+  if (user) {
+    return JSON.parse(user)
+  }
+  return {}
 }
 
 function setUser(user: User) {
