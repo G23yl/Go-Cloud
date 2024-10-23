@@ -2,12 +2,11 @@
 
 import type { User } from "@/types/types"
 
-function getUser() {
+function getUser(): User | undefined {
   let user = localStorage.getItem("user")
   if (user) {
     return JSON.parse(user)
   }
-  return {}
 }
 
 function setUser(user: User) {

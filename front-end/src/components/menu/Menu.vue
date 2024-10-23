@@ -1,0 +1,197 @@
+<script setup lang="ts">
+import type { MenuItems } from "@/types/types"
+import { deleteUser, getUser } from "@/utils/user"
+import {
+  Menu,
+  Files,
+  Grid,
+  Document,
+  Picture,
+  VideoCamera,
+  Headset,
+  QuestionFilled,
+  Setting,
+  UserFilled,
+  PhoneFilled,
+} from "@element-plus/icons-vue"
+import { ElMessage } from "element-plus"
+import { reactive } from "vue"
+import { useRouter } from "vue-router"
+
+// menu菜单的目录条目
+const menuItem = reactive<MenuItems>([
+  {
+    index: "1",
+    itemName: "主页",
+  },
+  {
+    index: "2",
+    itemName: "我的文件",
+  },
+  {
+    index: "3-1",
+    itemName: "我的文档",
+  },
+  {
+    index: "3-2",
+    itemName: "我的图像",
+  },
+  {
+    index: "3-3",
+    itemName: "我的视频",
+  },
+  {
+    index: "3-4",
+    itemName: "我的音频",
+  },
+  {
+    index: "3-5",
+    itemName: "其他文件",
+  },
+  {
+    index: "4",
+    itemName: "个人中心",
+  },
+  {
+    index: "5",
+    itemName: "帮助",
+  },
+])
+const router = useRouter()
+// 获取到用户登录信息用于显示头像，用户名，邮箱
+const user = getUser()
+
+const logout = () => {
+  // 删除用户信息
+  deleteUser()
+  router.push("/login")
+  ElMessage({
+    type: "success",
+    message: "登出成功",
+  })
+}
+</script>
+
+<template>
+  <div class="aside">
+    <div class="logo">
+      <img src="../../assets/logo.svg" alt="logo" style="height: 70px" />
+    </div>
+    <!-- <el-divider border-style="double" style="margin: 0 0 10px"></el-divider> -->
+    <el-scrollbar>
+      <div class="menu">
+        <el-menu
+          class="el-menu-vertical"
+          default-active="/dashboard/index"
+          style="border-right: none"
+          router
+        >
+          <el-menu-item-group title="PREVIEW">
+            <el-menu-item index="/dashboard/index">
+              <el-icon><Menu /></el-icon>
+              主页
+            </el-menu-item>
+            <el-menu-item index="/dashboard/files">
+              <el-icon><Files /></el-icon>
+              我的文件
+            </el-menu-item>
+            <el-sub-menu index="3">
+              <template #title>
+                <el-icon><Grid /></el-icon>
+                分类文件
+              </template>
+              <el-menu-item index="/dashboard/docs">
+                <el-icon><Document /></el-icon>
+                我的文档
+              </el-menu-item>
+              <el-menu-item index="/dashboard/images">
+                <el-icon><Picture /></el-icon>
+                我的图像
+              </el-menu-item>
+              <el-menu-item index="/dashboard/videos">
+                <el-icon><VideoCamera /></el-icon>
+                我的视频
+              </el-menu-item>
+              <el-menu-item index="/dashboard/audios">
+                <el-icon><Headset /></el-icon>
+                我的音频
+              </el-menu-item>
+              <el-menu-item index="/dashboard/others">
+                <el-icon><QuestionFilled /></el-icon>
+                其他文件
+              </el-menu-item>
+            </el-sub-menu>
+          </el-menu-item-group>
+          <el-menu-item-group title="ACCOUNT">
+            <el-menu-item index="/dashboard/settings">
+              <el-icon><Setting /></el-icon>
+              个人中心
+            </el-menu-item>
+            <el-menu-item index="/dashboard/help">
+              <el-icon><PhoneFilled /></el-icon>
+              帮助
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-menu>
+      </div>
+    </el-scrollbar>
+    <div class="account">
+      <el-avatar :src="user?.avatar"></el-avatar>
+      <div class="account-info">
+        <div class="account-name">{{ user?.username }}</div>
+        <div class="account-email">{{ user?.email }}</div>
+      </div>
+      <img
+        src="../../assets/logout.svg"
+        alt="logout"
+        style="width: 25px; margin-left: auto; cursor: pointer"
+        @click="logout"
+      />
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+@use "../../style/_variables.scss" as *;
+
+.aside {
+  height: calc(100vh - 40px);
+  border: none;
+  border-radius: $border-radius;
+  background-color: $aside-bg-color;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #fff;
+}
+.logo {
+  display: flex;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+}
+.account {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-top: auto;
+  background-color: $aside-account-bg-color;
+  .account-info {
+    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    .account-name {
+      font-size: 17px;
+    }
+    .account-email {
+      margin-top: 5px;
+      color: $aside-account-email-color;
+    }
+  }
+}
+.el-menu-vertical {
+  --el-menu-bg-color: $aside-bg-color;
+  --el-menu-text-color: #333;
+  --el-menu-hover-bg-color: gray;
+}
+</style>

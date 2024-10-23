@@ -6,7 +6,7 @@ import { getUser, setUser } from "@/utils/user"
 import { acceptHMRUpdate, defineStore } from "pinia"
 
 const useUserStore = defineStore("user", () => {
-  let user: User = getUser()
+  let user: User | undefined = getUser()
 
   async function login(data: LoginForm) {
     const response = await loginReq(data)

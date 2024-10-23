@@ -59,7 +59,7 @@ const handleSubmit = async () => {
     const response = await userStore.login(userInfo)
     // 登录成功提示信息以及跳转
     if (response) {
-      router.push("/index")
+      router.push("/dashboard")
       ElMessage({
         type: "success",
         message: "Login successful!",
@@ -84,7 +84,7 @@ const experiment = () => {
     <div class="card">
       <div class="side-panel">
         <div class="logo">
-          <img src="@/assets/gocloud.svg" alt="Go Cloud Logo" class="logo-image" />
+          <img src="../../assets/login-logo.svg" alt="Go Cloud Logo" class="logo-image" />
         </div>
         <h2>Manage Your Files Effortlessly</h2>
         <p>Welcome! Store and manage all your documents in one secure place.</p>

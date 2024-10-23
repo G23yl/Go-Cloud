@@ -22,3 +22,10 @@ export interface User {
 export interface LoginResponse extends BasicResponse {
   data: User
 }
+
+// 菜单条目
+export interface MenuItem {
+  index: string
+  itemName: string
+}
+export type MenuItems = MenuItem[]
