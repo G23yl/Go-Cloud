@@ -83,6 +83,8 @@ func SignUp(ctx *gin.Context) {
 	file, err := ctx.FormFile("avatar")
 	if err != nil {
 		fmt.Println("use default avatar")
+		// 使用默认头像
+		avatar = utils.GetImageUrl("default-avatar.png")
 	} else {
 		dir, _ := os.Getwd()
 		filename := file.Filename
