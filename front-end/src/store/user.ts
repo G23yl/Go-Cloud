@@ -1,7 +1,7 @@
 // 用户仓库
 
-import { loginReq } from "@/api/user"
-import type { LoginForm, User } from "@/types/types"
+import { loginReq, sendCodeReq, signUpReq } from "@/api/user"
+import type { LoginForm, SignUpForm, User } from "@/types/types"
 import { getUser, setUser } from "@/utils/user"
 import { acceptHMRUpdate, defineStore } from "pinia"
 
@@ -19,7 +19,17 @@ const useUserStore = defineStore("user", () => {
     return response
   }
 
-  return { login, user }
+  // 发送验证码
+  async function sendCode(email: string) {
+    return await sendCodeReq(email)
+  }
+
+  // 注册
+  async function signUp(data: SignUpForm) {
+    return await signUpReq(data)
+  }
+
+  return { login, sendCode, signUp, user }
 })
 
 // 热重载

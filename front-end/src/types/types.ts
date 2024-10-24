@@ -6,9 +6,10 @@ export interface LoginForm {
 }
 
 // 基础响应包含code和msg，但是data字段根据具体情况返回对应类型
-interface BasicResponse {
+export interface BasicResponse {
   code: number
   msg: string
+  data: any
 }
 
 export interface User {
@@ -29,3 +30,18 @@ export interface MenuItem {
   itemName: string
 }
 export type MenuItems = MenuItem[]
+
+// 注册表单
+export interface SignUpInfo {
+  username: string
+  password: string
+  confirmPassword: string
+  code: string
+  email: string
+}
+
+// 注册信息
+export type SignUpForm = Omit<SignUpInfo, "confirmPassword">
+
+// 注册表单检验规则
+export type SignUpFormRules = Omit<SignUpInfo, "code">
