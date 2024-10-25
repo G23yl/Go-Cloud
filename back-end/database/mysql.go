@@ -58,11 +58,46 @@ func DBCreateUserAndFileStore(user *model.User) error {
 		store := &model.FileStore{
 			UserID:      user.ID,
 			CurrentSize: 0,
-			MaxSize:     500 * 1024 * 1024, // 500M
+			MaxSize:     100 * 1024 * 1024, // 100M
 		}
 		if err := tx.Create(store).Error; err != nil {
 			return err
 		}
 		return nil
 	})
+}
+
+// 查询仓库容量和大小
+func GetStoreInfo(userID uint) (storeID uint, capacity, size int64) {
+	var store model.FileStore
+	db.Where("userID = ?", userID).First(&store)
+	return store.ID, store.MaxSize, store.CurrentSize
+}
+
+// 查询各类文件的数量
+func GetFilesNum(storeID uint) (*model.FilesNum, int64) {
+	var files []model.File
+	db.Where("file_store_id = ?", storeID).Find(&files)
+	filesNum := &model.FilesNum{}
+	for _, file := range files {
+		switch file.Type {
+		case 1:
+			filesNum.DocNum++
+		case 2:
+			filesNum.ImgNum++
+		case 3:
+			filesNum.VideoNum++
+		case 4:
+			filesNum.MusicNum++
+		case 5:
+			filesNum.OtherNum++
+		}
+	}
+	return filesNum, int64(len(files))
+}
+
+func GetFoldersNum(storeID uint) int64 {
+	var folders []model.Folder
+	db.Where("file_store_id = ?", storeID).Find(&folders)
+	return int64(len(folders))
 }
