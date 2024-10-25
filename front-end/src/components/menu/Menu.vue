@@ -77,7 +77,6 @@ const logout = () => {
     <div class="logo">
       <img src="../../assets/logo.svg" alt="logo" style="height: 70px" />
     </div>
-    <!-- <el-divider border-style="double" style="margin: 0 0 10px"></el-divider> -->
     <el-scrollbar>
       <div class="menu">
         <el-menu
@@ -88,47 +87,47 @@ const logout = () => {
         >
           <el-menu-item-group title="PREVIEW">
             <el-menu-item index="/dashboard/index">
-              <el-icon><Menu /></el-icon>
+              <font-awesome-icon class="icon" :icon="['fas', 'chart-simple']" size="lg" />
               主页
             </el-menu-item>
             <el-menu-item index="/dashboard/files">
-              <el-icon><Files /></el-icon>
+              <font-awesome-icon class="icon" :icon="['fas', 'folder']" size="lg" />
               我的文件
             </el-menu-item>
             <el-sub-menu index="3">
               <template #title>
-                <el-icon><Grid /></el-icon>
+                <font-awesome-icon class="icon" :icon="['fas', 'layer-group']" size="lg" />
                 分类文件
               </template>
               <el-menu-item index="/dashboard/docs">
-                <el-icon><Document /></el-icon>
+                <font-awesome-icon class="icon" :icon="['fas', 'file-word']" size="lg" />
                 我的文档
               </el-menu-item>
               <el-menu-item index="/dashboard/images">
-                <el-icon><Picture /></el-icon>
+                <font-awesome-icon class="icon" :icon="['fas', 'file-image']" size="lg" />
                 我的图像
               </el-menu-item>
               <el-menu-item index="/dashboard/videos">
-                <el-icon><VideoCamera /></el-icon>
+                <font-awesome-icon class="icon" :icon="['fas', 'file-video']" size="lg" />
                 我的视频
               </el-menu-item>
               <el-menu-item index="/dashboard/audios">
-                <el-icon><Headset /></el-icon>
+                <font-awesome-icon class="icon" :icon="['fas', 'file-audio']" size="lg" />
                 我的音频
               </el-menu-item>
               <el-menu-item index="/dashboard/others">
-                <el-icon><QuestionFilled /></el-icon>
+                <font-awesome-icon class="icon" :icon="['fas', 'file-circle-question']" size="lg" />
                 其他文件
               </el-menu-item>
             </el-sub-menu>
           </el-menu-item-group>
           <el-menu-item-group title="ACCOUNT">
             <el-menu-item index="/dashboard/settings">
-              <el-icon><Setting /></el-icon>
+              <font-awesome-icon class="icon" :icon="['fas', 'gear']" size="lg" />
               个人中心
             </el-menu-item>
             <el-menu-item index="/dashboard/help">
-              <el-icon><PhoneFilled /></el-icon>
+              <font-awesome-icon class="icon" :icon="['fas', 'circle-info']" size="lg" />
               帮助
             </el-menu-item>
           </el-menu-item-group>
@@ -141,10 +140,10 @@ const logout = () => {
         <div class="account-name">{{ user?.username }}</div>
         <div class="account-email">{{ user?.email }}</div>
       </div>
-      <img
-        src="../../assets/logout.svg"
-        alt="logout"
-        style="width: 25px; margin-left: auto; cursor: pointer"
+      <font-awesome-icon
+        class="logout-icon"
+        :icon="['fas', 'right-to-bracket']"
+        size="lg"
         @click="logout"
       />
     </div>
@@ -193,5 +192,14 @@ const logout = () => {
   --el-menu-bg-color: $aside-bg-color;
   --el-menu-text-color: #333;
   --el-menu-hover-bg-color: gray;
+}
+
+.icon {
+  margin-right: 10px;
+}
+
+.logout-icon {
+  margin-left: 9px;
+  cursor: pointer;
 }
 </style>
