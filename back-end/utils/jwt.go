@@ -15,21 +15,16 @@ type MyClaim struct {
 	jwt.RegisteredClaims
 }
 
-var (
-	JWTSecret = []byte(config.GetSecret())
-	JWTExpire = time.Duration(config.GetExpired()) * time.Hour
-)
-
 func GenerateJWT(userID uint) (string, error) {
 	myClaim := MyClaim{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(JWTExpire)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(config.GetExpired()))),
 		},
 	}
 	// 使用HS256算法生成token
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, myClaim)
-	token, err := claims.SignedString(JWTSecret)
+	token, err := claims.SignedString([]byte(config.GetSecret()))
 	if err != nil {
 		return "", err
 	}
@@ -39,7 +34,7 @@ func GenerateJWT(userID uint) (string, error) {
 // 解析JWT
 func ParseJWT(tokenString string) (*MyClaim, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaim{}, func(t *jwt.Token) (interface{}, error) {
-		return JWTSecret, nil
+		return []byte(config.GetSecret()), nil
 	})
 	if err != nil {
 		return nil, err

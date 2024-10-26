@@ -70,7 +70,7 @@ func DBCreateUserAndFileStore(user *model.User) error {
 // 查询仓库容量和大小
 func GetStoreInfo(userID uint) (storeID uint, capacity, size int64) {
 	var store model.FileStore
-	db.Where("userID = ?", userID).First(&store)
+	db.Where("user_id = ?", userID).First(&store)
 	return store.ID, store.MaxSize, store.CurrentSize
 }
 
