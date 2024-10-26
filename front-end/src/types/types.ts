@@ -64,3 +64,15 @@ export interface OverallData {
 export interface IndexResponse extends BasicResponse {
   data: OverallData
 }
+// docs, images, videos, audios, others页面响应
+export interface DIVAOData {
+  fileID: number
+  fileName: string
+  fileSize: number
+  updateTime: string
+  downloadNum: number
+  fileUrl: string
+}
+export interface DIVAOResponse extends BasicResponse {
+  data: DIVAOData[]
+}

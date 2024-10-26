@@ -1,65 +1,27 @@
 <script setup lang="ts">
 import type { MenuItems } from "@/types/types"
 import { deleteUser, getUser } from "@/utils/user"
-import {
-  Menu,
-  Files,
-  Grid,
-  Document,
-  Picture,
-  VideoCamera,
-  Headset,
-  QuestionFilled,
-  Setting,
-  UserFilled,
-  PhoneFilled,
-} from "@element-plus/icons-vue"
 import { ElMessage } from "element-plus"
-import { reactive } from "vue"
-import { useRouter } from "vue-router"
+import { onMounted, reactive, ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
-// menu菜单的目录条目
-const menuItem = reactive<MenuItems>([
-  {
-    index: "1",
-    itemName: "主页",
-  },
-  {
-    index: "2",
-    itemName: "我的文件",
-  },
-  {
-    index: "3-1",
-    itemName: "我的文档",
-  },
-  {
-    index: "3-2",
-    itemName: "我的图像",
-  },
-  {
-    index: "3-3",
-    itemName: "我的视频",
-  },
-  {
-    index: "3-4",
-    itemName: "我的音频",
-  },
-  {
-    index: "3-5",
-    itemName: "其他文件",
-  },
-  {
-    index: "4",
-    itemName: "个人中心",
-  },
-  {
-    index: "5",
-    itemName: "帮助",
-  },
-])
+// 获取router
 const router = useRouter()
+// 获取route
+const route = useRoute()
 // 获取到用户登录信息用于显示头像，用户名，邮箱
 const user = getUser()
+let activeIndex = ref("")
+// 实现menu刷新依然选中
+onMounted(() => {
+  activeIndex.value = route.path
+})
+watch(
+  () => route.path,
+  () => {
+    activeIndex.value = route.path
+  }
+)
 
 const logout = () => {
   // 删除用户信息
@@ -80,8 +42,8 @@ const logout = () => {
     <el-scrollbar>
       <div class="menu">
         <el-menu
+          :default-active="activeIndex"
           class="el-menu-vertical"
-          default-active="/dashboard/index"
           style="border-right: none"
           router
         >

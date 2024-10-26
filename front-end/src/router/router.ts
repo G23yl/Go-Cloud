@@ -39,6 +39,46 @@ const router = createRouter({
             requireAuth: true,
           },
         },
+        {
+          path: "docs",
+          component: () => import("@/views/Files/Docs.vue"),
+          name: "docs",
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: "images",
+          component: () => import("@/views/Files/Images.vue"),
+          name: "images",
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: "videos",
+          component: () => import("@/views/Files/Videos.vue"),
+          name: "videos",
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: "audios",
+          component: () => import("@/views/Files/Audios.vue"),
+          name: "audios",
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: "others",
+          component: () => import("@/views/Files/Others.vue"),
+          name: "others",
+          meta: {
+            requireAuth: true,
+          },
+        },
       ],
     },
   ],
