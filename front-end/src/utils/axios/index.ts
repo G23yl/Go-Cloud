@@ -3,6 +3,7 @@
 import type { LoginResponse } from "@/types/types"
 import axios, { type AxiosError } from "axios"
 import { ElMessage } from "element-plus"
+import { getUser } from "../user"
 
 const request = axios.create({
   timeout: 5000,
@@ -11,7 +12,8 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
-    //TODO 为后续请求添加token
+    // 为后续请求添加token，如果有token表示用户已登录，如果没token表示用户退出登录，处于未登录状态
+    config.headers.Authorization = getUser()?.token
     return config
   },
   (error: AxiosError) => {

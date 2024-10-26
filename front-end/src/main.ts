@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import {
   faChartSimple,
   faCircleInfo,
+  faFile,
   faFileAudio,
   faFileCircleQuestion,
   faFileImage,
@@ -21,6 +22,8 @@ import {
   faLayerGroup,
   faRightToBracket,
 } from "@fortawesome/free-solid-svg-icons"
+import "vue-data-ui/style.css"
+import { VueUiRadar } from "vue-data-ui"
 
 library.add(
   faChartSimple,
@@ -33,7 +36,8 @@ library.add(
   faFileCircleQuestion,
   faRightToBracket,
   faCircleInfo,
-  faGear
+  faGear,
+  faFile
 )
 
 const app = createApp(App)
@@ -42,6 +46,7 @@ app.use(router)
 app.use(pinia)
 app.use(ElementPlus)
 app.component("font-awesome-icon", FontAwesomeIcon)
+app.component("VueUiRadar", VueUiRadar)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }

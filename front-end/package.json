@@ -21,6 +21,7 @@
     "sass": "^1.80.3",
     "sass-loader": "^16.0.2",
     "vue": "^3.5.11",
+    "vue-data-ui": "^2.3.43",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {

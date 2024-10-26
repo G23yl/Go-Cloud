@@ -12,14 +12,13 @@ export interface BasicResponse {
   data: any
 }
 
+// 继承BasicResponse，根据具体返回情况设置data字段的类型
 export interface User {
   avatar: string
   email: string
   token: string
   username: string
 }
-
-// 继承BasicResponse，根据具体返回情况设置data字段的类型
 export interface LoginResponse extends BasicResponse {
   data: User
 }
@@ -45,3 +44,23 @@ export type SignUpForm = Omit<SignUpInfo, "confirmPassword">
 
 // 注册表单检验规则
 export type SignUpFormRules = Omit<SignUpInfo, "code">
+
+// index页面响应
+export interface OverallData {
+  filesNum: number
+  foldersNum: number
+  storeDetail: {
+    capacity: number
+    size: number
+  }
+  categoryNum: {
+    DocNum: number
+    ImgNum: number
+    VideoNum: number
+    MusicNum: number
+    OtherNum: number
+  }
+}
+export interface IndexResponse extends BasicResponse {
+  data: OverallData
+}
