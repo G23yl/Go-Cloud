@@ -51,7 +51,7 @@ const wheelDataset = reactive({
             <el-divider direction="vertical"></el-divider>
             <div class="num">
               <span>文件夹</span>
-              <span>{{ data?.foldersNum }}</span>
+              <span>{{ data ? data.foldersNum : 0 }}</span>
             </div>
           </div>
           <div class="down category">
@@ -66,7 +66,7 @@ const wheelDataset = reactive({
             <el-divider direction="vertical"></el-divider>
             <div class="num">
               <span>文件</span>
-              <span>{{ data?.filesNum }}</span>
+              <span>{{ data ? data.filesNum : 0 }}</span>
             </div>
           </div>
           <div class="down store">
