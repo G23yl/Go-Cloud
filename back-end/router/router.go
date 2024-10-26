@@ -21,6 +21,8 @@ func SetUpRouter() *gin.Engine {
 
 	cloud := router.Group("cloud")
 	cloud.Use(middleware.Auth())
+	// 设置跨域
+	cloud.Use(middleware.Cors())
 	{
 		cloud.GET("/index", services.Index)
 	}
