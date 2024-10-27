@@ -20,5 +20,6 @@ import Menu from "@/components/menu/Menu.vue"
   align-items: center;
   height: 100vh;
   overflow: hidden;
+  background-color: #eee;
 }
 </style>

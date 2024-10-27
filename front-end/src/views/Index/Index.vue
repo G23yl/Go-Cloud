@@ -45,7 +45,7 @@ const wheelDataset = reactive({
                 :icon="['fas', 'folder']"
                 size="2xl"
                 bounce
-                style="color: #5f7578"
+                style="color: #6683cc"
               />
             </div>
             <el-divider direction="vertical"></el-divider>
@@ -61,7 +61,7 @@ const wheelDataset = reactive({
         <div class="group2">
           <div class="upper file-num">
             <div class="icon">
-              <font-awesome-icon :icon="['fas', 'file']" size="2xl" bounce style="color: #5f7578" />
+              <font-awesome-icon :icon="['fas', 'file']" size="2xl" bounce style="color: #6683cc" />
             </div>
             <el-divider direction="vertical"></el-divider>
             <div class="num">
@@ -99,8 +99,10 @@ const wheelDataset = reactive({
   justify-content: space-evenly;
   align-items: center;
   transition: all 0.5s ease;
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
   &:hover {
-    background-color: #96e6a1;
+    background-color: hsl(222, 42%, 52%, 20%);
     transform: scale(1.02);
     box-shadow: 0 5px 35px 0px rgba(0, 0, 0, 0.1);
   }

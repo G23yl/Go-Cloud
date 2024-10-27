@@ -152,8 +152,8 @@ const logout = () => {
 }
 .el-menu-vertical {
   --el-menu-bg-color: $aside-bg-color;
-  --el-menu-text-color: #333;
-  --el-menu-hover-bg-color: gray;
+  --el-menu-active-color: #5170b8;
+  --el-menu-hover-bg-color: hsl(222, 42%, 52%, 20%);
 }
 
 .icon {

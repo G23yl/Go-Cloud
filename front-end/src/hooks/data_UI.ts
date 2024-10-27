@@ -56,7 +56,7 @@ export const useDataUI = () => {
       chart: {
         useGradient: true,
         gradientIntensity: 40,
-        backgroundColor: "#ffffff",
+        backgroundColor: "#eeeeee",
         color: "#1a1a1a",
         layout: {
           labels: {
@@ -166,7 +166,7 @@ export const useDataUI = () => {
     style: {
       fontFamily: "inherit",
       chart: {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "eeeeee",
         color: "#1A1A1A",
         animation: { use: true, speed: 0.5, acceleration: 1 },
         layout: {

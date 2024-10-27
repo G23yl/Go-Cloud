@@ -76,7 +76,7 @@ const searchContent = ref("")
 .input:focus,
 input:hover {
   outline: none;
-  border-color: rgba(0, 48, 73, 0.4);
+  border-color: #5170b8;
   background-color: #fff;
   box-shadow: 0 0 0 4px rgb(0 48 73 / 10%);
 }
