@@ -3,12 +3,22 @@ package response
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Error struct {
 	msg string
+}
+
+type CategoryRes struct {
+	FileID      uint      `json:"fileID"`
+	FileName    string    `json:"fileName"`
+	FileSize    int64     `json:"fileSize"`
+	UpdateTime  time.Time `json:"updateTime"`
+	DownloadNum int64     `json:"downloadNum"`
+	FileUrl     string    `json:"fileUrl"`
 }
 
 var ErrorParams Error = Error{"参数绑定错误"}

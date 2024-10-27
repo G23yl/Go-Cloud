@@ -101,3 +101,9 @@ func GetFoldersNum(storeID uint) int64 {
 	db.Where("file_store_id = ?", storeID).Find(&folders)
 	return int64(len(folders))
 }
+
+func GetCategoryFiles(storeID uint, fileType int) []model.File {
+	var files []model.File
+	db.Where("file_store_id = ? AND type = ?", storeID, fileType).Find(&files)
+	return files
+}

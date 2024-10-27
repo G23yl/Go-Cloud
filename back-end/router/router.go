@@ -25,6 +25,11 @@ func SetUpRouter() *gin.Engine {
 	cloud.Use(middleware.Cors())
 	{
 		cloud.GET("/index", services.Index)
+		cloud.GET("/docs", services.Docs)
+		cloud.GET("/images", services.Images)
+		cloud.GET("/videos", services.Videos)
+		cloud.GET("/audios", services.Audios)
+		cloud.GET("/others", services.Others)
 	}
 	return router
 }
