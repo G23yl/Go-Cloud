@@ -76,3 +76,10 @@ export interface DIVAOData {
 export interface DIVAOResponse extends BasicResponse {
   data: DIVAOData[]
 }
+
+// 更换头像响应
+export interface AvatarResponse extends BasicResponse {
+  data: {
+    avatar: string
+  }
+}

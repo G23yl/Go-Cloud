@@ -13,6 +13,7 @@ import {
   faCircleInfo,
   faCircleQuestion,
   faCloudArrowDown,
+  faEnvelope,
   faEye,
   faFile,
   faFileAudio,
@@ -30,6 +31,7 @@ import {
   faRightToBracket,
   faShareNodes,
   faTrashCan,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons"
 import "vue-data-ui/style.css"
 import { VueUiRadar } from "vue-data-ui"
@@ -55,7 +57,9 @@ library.add(
   faEye,
   faFilm,
   faMusic,
-  faCircleQuestion
+  faCircleQuestion,
+  faUser,
+  faEnvelope
 )
 
 const app = createApp(App)

@@ -35,7 +35,7 @@ const wheelDataset = reactive({
     <el-header>
       <Title :title="title" />
     </el-header>
-    <el-divider></el-divider>
+    <el-divider style="width: 99%"></el-divider>
     <el-main>
       <div class="content">
         <div class="group1">
@@ -84,6 +84,10 @@ const wheelDataset = reactive({
 
 <style scoped lang="scss">
 @use "../../style/_variables.scss" as *;
+
+.el-main {
+  --el-main-padding: 0 20px;
+}
 
 .content {
   display: flex;

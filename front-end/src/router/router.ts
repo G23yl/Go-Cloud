@@ -79,6 +79,22 @@ const router = createRouter({
             requireAuth: true,
           },
         },
+        {
+          path: "settings",
+          component: () => import("@/views/settings/Settings.vue"),
+          name: "settings",
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: "helps",
+          component: () => import("@/views/help/Help.vue"),
+          name: "helps",
+          meta: {
+            requireAuth: true,
+          },
+        },
       ],
     },
   ],

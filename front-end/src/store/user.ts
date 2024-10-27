@@ -1,8 +1,9 @@
 // 用户仓库
 
-import { loginReq, sendCodeReq, signUpReq } from "@/api/user"
+import { changeAvatarReq, loginReq, sendCodeReq, signUpReq } from "@/api/user"
 import type { LoginForm, SignUpForm } from "@/types/types"
-import { setUser } from "@/utils/user"
+import { getUser, setUser } from "@/utils/user"
+import { request } from "node_modules/axios/index.cjs"
 import { acceptHMRUpdate, defineStore } from "pinia"
 
 const useUserStore = defineStore("user", () => {
@@ -15,18 +16,29 @@ const useUserStore = defineStore("user", () => {
     }
     return response
   }
-
   // 发送验证码
   async function sendCode(email: string) {
     return await sendCodeReq(email)
   }
-
   // 注册
   async function signUp(data: SignUpForm) {
     return await signUpReq(data)
   }
+  // 修改头像
+  async function changeAvatar(avatar: File) {
+    const response = await changeAvatarReq(avatar)
+    // 更新localstorage中user信息
+    if (response) {
+      const user = getUser()
+      if (user) {
+        user.avatar = response.data.avatar
+        setUser(user)
+      }
+    }
+    return response
+  }
 
-  return { login, sendCode, signUp }
+  return { login, sendCode, signUp, changeAvatar }
 })
 
 // 热重载
