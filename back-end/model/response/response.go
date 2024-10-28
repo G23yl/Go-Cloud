@@ -32,6 +32,7 @@ var ErrorUserCreate Error = Error{"用户创建失败"}
 var ErrorEmailSend Error = Error{"邮件发送失败"}
 var ErrorCodeExpired Error = Error{"验证码已过期"}
 var ErrorCodeIncorrect Error = Error{"验证码错误"}
+var ErrorAvatarUpload Error = Error{"头像上传失败"}
 
 func newResponse(code int, msg string, data any) gin.H {
 	return gin.H{

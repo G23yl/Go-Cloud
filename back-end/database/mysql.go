@@ -107,3 +107,12 @@ func GetCategoryFiles(storeID uint, fileType int) []model.File {
 	db.Where("file_store_id = ? AND type = ?", storeID, fileType).Find(&files)
 	return files
 }
+
+func UpdateAvatar(userID uint, avatar string) string {
+	var user model.User
+	db.Where("ID = ?", userID).First(&user)
+	oldAvatar := user.Avatar
+	user.Avatar = avatar
+	db.Save(&user)
+	return oldAvatar
+}

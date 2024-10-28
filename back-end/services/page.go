@@ -15,6 +15,7 @@ func Index(ctx *gin.Context) {
 	userID, ok := ctx.Get("userID")
 	if !ok {
 		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
 	}
 	// 查询仓库容量和大小
 	storeID, capacity, size := database.GetStoreInfo(userID.(uint))
@@ -39,6 +40,7 @@ func Docs(ctx *gin.Context) {
 	userID, ok := ctx.Get("userID")
 	if !ok {
 		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
 	}
 	// 获取仓库ID
 	storeID, _, _ := database.GetStoreInfo(userID.(uint))
@@ -64,6 +66,7 @@ func Images(ctx *gin.Context) {
 	userID, ok := ctx.Get("userID")
 	if !ok {
 		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
 	}
 	// 获取仓库ID
 	storeID, _, _ := database.GetStoreInfo(userID.(uint))
@@ -89,6 +92,7 @@ func Videos(ctx *gin.Context) {
 	userID, ok := ctx.Get("userID")
 	if !ok {
 		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
 	}
 	// 获取仓库ID
 	storeID, _, _ := database.GetStoreInfo(userID.(uint))
@@ -114,6 +118,7 @@ func Audios(ctx *gin.Context) {
 	userID, ok := ctx.Get("userID")
 	if !ok {
 		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
 	}
 	// 获取仓库ID
 	storeID, _, _ := database.GetStoreInfo(userID.(uint))
@@ -139,6 +144,7 @@ func Others(ctx *gin.Context) {
 	userID, ok := ctx.Get("userID")
 	if !ok {
 		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
 	}
 	// 获取仓库ID
 	storeID, _, _ := database.GetStoreInfo(userID.(uint))

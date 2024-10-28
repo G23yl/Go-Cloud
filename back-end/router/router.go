@@ -19,6 +19,13 @@ func SetUpRouter() *gin.Engine {
 	router.POST("/register", services.SignUp)
 	router.POST("/verify", services.Verify)
 
+	user := router.Group("user")
+	user.Use(middleware.Auth())
+	user.Use(middleware.Cors())
+	{
+		user.POST("/avatar", services.ChangeAvatar)
+	}
+
 	cloud := router.Group("cloud")
 	cloud.Use(middleware.Auth())
 	// 设置跨域

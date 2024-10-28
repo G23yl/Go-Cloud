@@ -3,7 +3,6 @@
 import { changeAvatarReq, loginReq, sendCodeReq, signUpReq } from "@/api/user"
 import type { LoginForm, SignUpForm } from "@/types/types"
 import { getUser, setUser } from "@/utils/user"
-import { request } from "node_modules/axios/index.cjs"
 import { acceptHMRUpdate, defineStore } from "pinia"
 
 const useUserStore = defineStore("user", () => {

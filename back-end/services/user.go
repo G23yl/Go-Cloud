@@ -9,6 +9,7 @@ import (
 	"disk/utils"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -134,4 +135,43 @@ func Verify(ctx *gin.Context) {
 		return
 	}
 	response.Success(ctx, "验证码发送成功", nil)
+}
+
+// 更换头像
+func ChangeAvatar(ctx *gin.Context) {
+	// 获取用户id
+	userID, ok := ctx.Get("userID")
+	if !ok {
+		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+	}
+	// 获取头像
+	file, err := ctx.FormFile("avatar")
+	if err != nil {
+		response.RequestError(ctx, response.ErrorAvatarUpload)
+		return
+	}
+	// 创建头像本地地址映射url
+	var avatar string
+	dir, _ := os.Getwd()
+	suffix := strings.Split(file.Filename, ".")
+	avatarName := fmt.Sprintf("%s_%d_%s%s", "user", userID.(uint), "avatar", "."+suffix[len(suffix)-1])
+	filepath := dir + "/static/images/" + avatarName
+	if err := ctx.SaveUploadedFile(file, filepath); err != nil {
+		response.ServerError(ctx, response.ErrorAvatarUpload)
+		return
+	} else {
+		avatar = utils.GetImageUrl(avatarName)
+	}
+	// 把用户查找出来并更改对应的头像地址
+	// step1: 找出用户
+	// step2: 删除用户之前的头像
+	// step3: 更新用户的头像
+	// step4: 返回更新之后的头像url地址
+	oldAvatar := database.UpdateAvatar(userID.(uint), avatar)
+	// 删除头像
+	oldAvatarPath := dir + "/static/images/" + oldAvatar
+	os.Remove(oldAvatarPath)
+	response.Success(ctx, "头像更新成功", gin.H{
+		"avatar": avatar,
+	})
 }
