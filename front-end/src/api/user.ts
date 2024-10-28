@@ -42,7 +42,7 @@ export const changeAvatarReq = async (data: File) => {
   try {
     const formData = new FormData()
     formData.append("avatar", data)
-    return await request.post<any, AvatarResponse>("/avatar", formData)
+    return await request.post<any, AvatarResponse>("/user/avatar", formData)
   } catch (error) {
     console.log(error)
   }
