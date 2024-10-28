@@ -3,6 +3,7 @@ import { ref } from "vue"
 import Title from "@/components/Title/Title.vue"
 import { getUser } from "@/utils/user"
 import useUserStore from "@/store/user"
+import { ElMessage } from "element-plus"
 
 const title = ref("个人中心")
 const input = ref<HTMLInputElement>()
@@ -17,8 +18,10 @@ const handleChange = async (e: Event) => {
     try {
       const res = await changeAvatar(file)
       if (res) {
-        // 更新头像
-        user = getUser()
+        ElMessage({
+          type: "success",
+          message: "头像更新成功",
+        })
       }
     } catch (error) {}
   }
@@ -36,7 +39,7 @@ const move = (e: MouseEvent) => {
   }
 }
 // 鼠标移出时恢复原状
-const leave = (e: MouseEvent) => {
+const leave = () => {
   if (cardRef.value) {
     cardRef.value.style.transform = `rotateX(0deg) rotateY(0deg)`
   }
