@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DIVAOData } from "@/types/types"
+import { ref, watch } from "vue"
 
 interface Props {
   data: DIVAOData[]
@@ -8,11 +9,16 @@ interface Props {
   color?: string
 }
 const { data, icon, size = "lg", color = "#74c0fc" } = defineProps<Props>()
+// 实时更新表格高度
+let tableHeight = ref(document.body.clientHeight - 135)
+window.addEventListener("resize", () => {
+  tableHeight.value = document.body.clientHeight - 135
+})
 </script>
 
 <template>
   <div class="content">
-    <el-table :data="data" style="width: 98%" border max-height="447px">
+    <el-table :data="data" style="width: 98%" border stripe :max-height="tableHeight">
       <el-table-column label="名称" width="180">
         <template #default="scope">
           <div style="display: flex; align-items: center">

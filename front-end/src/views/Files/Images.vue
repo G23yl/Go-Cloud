@@ -113,13 +113,77 @@ const test_data = reactive<DIVAOData[]>([
     updateTime: "2014-09-13",
     fileUrl: "xxx",
   },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
+  {
+    fileID: 2,
+    fileName: "test2",
+    fileSize: 100,
+    downloadNum: 0,
+    updateTime: "2014-09-13",
+    fileUrl: "xxx",
+  },
 ])
 </script>
 
 <template>
   <el-container style="margin-left: 20px">
     <el-header>
-      <Title :title="title" />
+      <Title :title="title" :search="false" />
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>

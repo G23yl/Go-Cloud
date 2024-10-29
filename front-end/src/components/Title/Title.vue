@@ -1,18 +1,60 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ArrowRight } from "@element-plus/icons-vue"
+import { ref, watch } from "vue"
+import { useRouter } from "vue-router"
 
-const props = defineProps<{
+interface Props {
   title: string
-}>()
-
+  search: boolean
+  bread?: boolean
+  path?: string
+}
+const { title, search = false, bread = false, path = "" } = defineProps<Props>()
 const searchContent = ref("")
+const breadItems = ref<string[]>([])
+const router = useRouter()
+// 把path按照"/"分割成数组，作为bread-items
+if (path === "/") {
+  breadItems.value = ["/"]
+} else {
+  const pathItems = path.split("/")
+  for (let i = 0; i < pathItems.length; i++) {
+    if (pathItems[i] === "") {
+      breadItems.value?.push("/")
+    } else {
+      breadItems.value?.push(pathItems[i])
+    }
+  }
+}
+// 监控路由参数变化，路由参数变化就刷新页面
+watch(
+  () => router.currentRoute.value.query,
+  () => {
+    location.reload()
+  }
+)
+
+// 根据点击的idx获取path参数的新值
+const jump = (idx: number) => {
+  if (idx === breadItems.value.length - 1) {
+    return
+  }
+  let p = ""
+  for (let i = 0; i <= idx; i++) {
+    p += breadItems.value[i]
+    if (i > 0 && i < idx) {
+      p += "/"
+    }
+  }
+  return "/dashboard/files?path=" + p
+}
 </script>
 
 <template>
   <div class="title">
-    <div class="title-name">{{ props.title }}</div>
+    <div class="title-name">{{ title }}</div>
     <el-divider direction="vertical" style="margin-left: 20px"></el-divider>
-    <div class="group">
+    <div v-if="search" class="group">
       <svg viewBox="0 0 24 24" aria-hidden="true" class="icon">
         <g>
           <path
@@ -21,6 +63,13 @@ const searchContent = ref("")
         </g>
       </svg>
       <input class="input" type="search" placeholder="Search" v-model="searchContent" />
+    </div>
+    <div v-if="bread" class="bread">
+      <el-breadcrumb :separator-icon="ArrowRight">
+        <el-breadcrumb-item v-for="(bread, idx) in breadItems" :key="idx" :to="jump(idx)">{{
+          bread
+        }}</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
   </div>
 </template>
@@ -87,5 +136,9 @@ input:hover {
   fill: #9e9ea7;
   width: 1rem;
   height: 1rem;
+}
+
+.bread {
+  margin-left: 20px;
 }
 </style>

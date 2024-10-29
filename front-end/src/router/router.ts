@@ -38,6 +38,7 @@ const router = createRouter({
           meta: {
             requireAuth: true,
           },
+          props: (route) => ({ query: route.query.path }),
         },
         {
           path: "docs",

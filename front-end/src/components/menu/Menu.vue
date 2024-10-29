@@ -52,7 +52,7 @@ const logout = () => {
               <font-awesome-icon class="icon" :icon="['fas', 'chart-simple']" size="lg" />
               主页
             </el-menu-item>
-            <el-menu-item index="/dashboard/files">
+            <el-menu-item index="/dashboard/files?path=/">
               <font-awesome-icon class="icon" :icon="['fas', 'folder']" size="lg" />
               我的文件
             </el-menu-item>

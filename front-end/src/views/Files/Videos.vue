@@ -21,7 +21,7 @@ const title = ref("我的视频")
 <template>
   <el-container style="margin-left: 20px">
     <el-header>
-      <Title :title="title" />
+      <Title :title="title" :search="false" />
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
