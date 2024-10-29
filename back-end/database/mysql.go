@@ -5,8 +5,10 @@ import (
 	"disk/config"
 	"disk/model"
 	"disk/model/response"
+	"disk/utils/util_file"
 	"fmt"
 	"log"
+	"strings"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -118,4 +120,17 @@ func GetCategoryFiles(storeID uint, fileType int) []model.File {
 
 func UpdateAvatar(user *model.User) error {
 	return db.Save(&user).Error
+}
+
+func CreateFile(storeID uint, filePath, fileName string, size int64) error {
+	arr := strings.Split(fileName, ".")
+	pureName, suffix := arr[0], "."+arr[1]
+	return db.Create(&model.File{
+		FileStoreID: storeID,
+		FileName:    pureName,
+		FilePath:    filePath,
+		FileSize:    size,
+		Suffix:      suffix,
+		Type:        util_file.GetFileType(suffix),
+	}).Error
 }

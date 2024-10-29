@@ -16,3 +16,7 @@ type SignUpReq struct {
 type VerifyReq struct {
 	Email string `json:"email"`
 }
+
+type UploadReq struct {
+	FilePath string `json:"filepath" form:"filepath"`
+}

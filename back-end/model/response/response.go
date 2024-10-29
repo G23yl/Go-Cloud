@@ -33,6 +33,9 @@ var ErrorEmailSend Error = Error{"邮件发送失败"}
 var ErrorCodeExpired Error = Error{"验证码已过期"}
 var ErrorCodeIncorrect Error = Error{"验证码错误"}
 var ErrorAvatarUpload Error = Error{"头像上传失败"}
+var ErrorFileUpload Error = Error{"文件上传失败"}
+var ErrorFilePathNotExist Error = Error{"文件路径不存在"}
+var ErrorFileExist Error = Error{"同名文件已存在"}
 
 func newResponse(code int, msg string, data any) gin.H {
 	return gin.H{

@@ -4,7 +4,10 @@ package services
 
 import (
 	"disk/database"
+	"disk/model/request"
 	"disk/model/response"
+	"disk/utils/util_file"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -162,4 +165,56 @@ func Others(ctx *gin.Context) {
 		}
 	}
 	response.Success(ctx, "获取成功", others)
+}
+
+// 上传文件
+func Upload(ctx *gin.Context) {
+	// 获取用户id
+	userID, ok := ctx.Get("userID")
+	if !ok {
+		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
+	}
+	// 获取仓库ID
+	storeID, _, _ := database.GetStoreInfo(userID.(uint))
+	// 获取文件的路由
+	var fileInfo request.UploadReq
+	if err := ctx.ShouldBind(&fileInfo); err != nil {
+		response.RequestError(ctx, response.ErrorParams)
+		return
+	}
+	// 获取文件
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		response.RequestError(ctx, response.ErrorFileUpload)
+		return
+	}
+	// 获取文件要保存的位置并判断有没有重复文件，如果有，就不允许上传
+	dir, _ := os.Getwd()
+	fileFolder := dir + "/static/local_store/" + fileInfo.FilePath
+	allFiles, err := util_file.GetAllFiles(fileFolder)
+	if err != nil {
+		response.RequestError(ctx, response.ErrorFilePathNotExist)
+		return
+	}
+	for _, fileName := range allFiles {
+		if fileName == file.Filename {
+			response.RequestError(ctx, response.ErrorFileExist)
+			return
+		}
+	}
+	// 没有呢
+	// 保存文件
+	err = ctx.SaveUploadedFile(file, fileFolder+"/"+file.Filename)
+	if err != nil {
+		response.RequestError(ctx, response.ErrorFileUpload)
+		return
+	}
+	// 存在数据库中
+	err = database.CreateFile(storeID, fileInfo.FilePath, file.Filename, file.Size)
+	if err != nil {
+		response.RequestError(ctx, response.ErrorFileUpload)
+		return
+	}
+	response.Success(ctx, "上传成功", nil)
 }
