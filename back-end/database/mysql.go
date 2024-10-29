@@ -37,6 +37,14 @@ func DBFindByUsername(username string) *model.User {
 	return &user
 }
 
+func DBFindByID(userID uint) *model.User {
+	var user model.User
+	if db.Where("ID = ?", userID).First(&user).RowsAffected == 0 {
+		return nil
+	}
+	return &user
+}
+
 // 检验用户名和邮箱是否存在
 func CheckUsernameAndEmail(username, email string) *response.Error {
 	var user model.User
@@ -108,11 +116,6 @@ func GetCategoryFiles(storeID uint, fileType int) []model.File {
 	return files
 }
 
-func UpdateAvatar(userID uint, avatar string) string {
-	var user model.User
-	db.Where("ID = ?", userID).First(&user)
-	oldAvatar := user.Avatar
-	user.Avatar = avatar
-	db.Save(&user)
-	return oldAvatar
+func UpdateAvatar(user *model.User) error {
+	return db.Save(&user).Error
 }

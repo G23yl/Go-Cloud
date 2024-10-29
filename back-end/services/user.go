@@ -151,8 +151,16 @@ func ChangeAvatar(ctx *gin.Context) {
 		return
 	}
 	// 创建头像本地地址映射url
-	var avatar string
+	// 删除旧头像
 	dir, _ := os.Getwd()
+	user := database.DBFindByID(userID.(uint))
+	// 用户头像不是默认头像才删除旧头像
+	if !strings.Contains(user.Avatar, "default-avatar") {
+		oldAvatarName := strings.Split(user.Avatar, "/")
+		oldAvatarPath := dir + "/static/images/" + oldAvatarName[len(oldAvatarName)-1]
+		os.Remove(oldAvatarPath)
+	}
+	// 更新用户头像
 	suffix := strings.Split(file.Filename, ".")
 	avatarName := fmt.Sprintf("%s_%d_%s%s", "user", userID.(uint), "avatar", "."+suffix[len(suffix)-1])
 	filepath := dir + "/static/images/" + avatarName
@@ -160,18 +168,13 @@ func ChangeAvatar(ctx *gin.Context) {
 		response.ServerError(ctx, response.ErrorAvatarUpload)
 		return
 	} else {
-		avatar = utils.GetImageUrl(avatarName)
+		user.Avatar = utils.GetImageUrl(avatarName)
 	}
-	// 把用户查找出来并更改对应的头像地址
-	// step1: 找出用户
-	// step2: 删除用户之前的头像
-	// step3: 更新用户的头像
-	// step4: 返回更新之后的头像url地址
-	oldAvatar := database.UpdateAvatar(userID.(uint), avatar)
-	// 删除头像
-	oldAvatarPath := dir + "/static/images/" + oldAvatar
-	os.Remove(oldAvatarPath)
+	if err := database.UpdateAvatar(user); err != nil {
+		response.ServerError(ctx, response.ErrorAvatarUpload)
+		return
+	}
 	response.Success(ctx, "头像更新成功", gin.H{
-		"avatar": avatar,
+		"avatar": user.Avatar,
 	})
 }
