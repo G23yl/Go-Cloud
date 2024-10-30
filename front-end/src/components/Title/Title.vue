@@ -5,7 +5,7 @@ import { useRouter } from "vue-router"
 
 interface Props {
   title: string
-  search: boolean
+  search?: boolean
   bread?: boolean
   path?: string
 }
