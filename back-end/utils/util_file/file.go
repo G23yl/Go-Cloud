@@ -3,6 +3,7 @@ package util_file
 
 import (
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -21,42 +22,26 @@ func GetAllFiles(path string) ([]string, error) {
 	return files, nil
 }
 
+// 各种类型的数组集合
+var (
+	DocType   = []string{".doc", ".docx", ".txt", ".pdf", ".md", ".xls"}
+	ImgType   = []string{".jpg", ".png", ".gif", ".jpeg", ".svg"}
+	VideoType = []string{".mp4", ".avi", ".mov", ".rmvb", ".rm"}
+	AudioType = []string{".mp3", ".cda", ".wav", ".wma", ".ogg"}
+)
+
 // 判断文件类型
 func GetFileType(suffix string) int {
 	fileSuffix := strings.ToLower(suffix)
-	switch fileSuffix {
-	case ".doc":
-		fallthrough
-	case ".docx":
-		fallthrough
-	case ".txt":
-		fallthrough
-	case ".pdf":
+	if slices.Contains(DocType, fileSuffix) {
 		return 1
-
-	case ".jpg":
-		fallthrough
-	case ".png":
-		fallthrough
-	case ".gif":
-		fallthrough
-	case ".jpeg":
+	} else if slices.Contains(ImgType, fileSuffix) {
 		return 2
-
-	case ".mp4":
-		fallthrough
-	case ".avi":
-		fallthrough
-	case ".mov":
-		fallthrough
-	case ".rmvb":
-		fallthrough
-	case ".rm":
+	} else if slices.Contains(VideoType, fileSuffix) {
 		return 3
-
-	case ".mp3", ".cda", ".wav", ".wma", ".ogg":
+	} else if slices.Contains(AudioType, fileSuffix) {
 		return 4
-	default:
+	} else {
 		return 5
 	}
 }
