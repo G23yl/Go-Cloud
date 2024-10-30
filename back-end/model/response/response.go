@@ -12,6 +12,7 @@ type Error struct {
 	msg string
 }
 
+// 分类文件返回类型
 type CategoryRes struct {
 	FileID      uint      `json:"fileID"`
 	FileName    string    `json:"fileName"`
@@ -19,6 +20,17 @@ type CategoryRes struct {
 	UpdateTime  time.Time `json:"updateTime"`
 	DownloadNum int64     `json:"downloadNum"`
 	FileUrl     string    `json:"fileUrl"`
+}
+
+// 总的文件和文件夹返回类型
+type FFRes struct {
+	FileID        uint      `json:"fileID"`
+	FileName      string    `json:"fileName"`
+	FileSize      int64     `json:"fileSize"`
+	UpdateTime    time.Time `json:"updateTime"`
+	FileType      string    `json:"fileType"`      // 是文件还是文件夹
+	DownloadCount int64     `json:"downloadCount"` // 如果是文件夹就忽略此字段
+	FilePath      string    `json:"filePath"`
 }
 
 var ErrorParams Error = Error{"参数绑定错误"}

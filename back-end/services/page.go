@@ -191,7 +191,7 @@ func Upload(ctx *gin.Context) {
 	}
 	// 获取文件要保存的位置并判断有没有重复文件，如果有，就不允许上传
 	dir, _ := os.Getwd()
-	fileFolder := dir + "/static/local_store/" + fileInfo.FilePath
+	fileFolder := dir + "/static/local_store" + fileInfo.FilePath
 	allFiles, err := util_file.GetAllFiles(fileFolder)
 	if err != nil {
 		response.RequestError(ctx, response.ErrorFilePathNotExist)
@@ -217,4 +217,35 @@ func Upload(ctx *gin.Context) {
 		return
 	}
 	response.Success(ctx, "上传成功", nil)
+}
+
+// 获取对应路由下的文件和文件夹
+func GetInPathFiles(ctx *gin.Context) {
+	// 采用query参数，类似于?path=xxx
+	path := ctx.Query("path")
+	//查询所有对应path的文件和文件夹
+	files, folders := database.GetInPathFiles(path)
+	// 把查询到的结果整理一下返回
+	res := make([]response.FFRes, len(files)+len(folders))
+	for idx, f := range folders {
+		res[idx] = response.FFRes{
+			FileID:     f.ID,
+			FileName:   f.FolderName,
+			UpdateTime: f.UpdatedAt,
+			FileType:   "dir",
+			FilePath:   f.FilePath,
+		}
+	}
+	for idx, f := range files {
+		res[idx+len(folders)] = response.FFRes{
+			FileID:        f.ID,
+			FileName:      f.FileName,
+			UpdateTime:    f.UpdatedAt,
+			FileType:      "file",
+			FileSize:      f.FileSize,
+			DownloadCount: f.DownloadCount,
+			FilePath:      f.FilePath,
+		}
+	}
+	response.Success(ctx, "获取成功", res)
 }

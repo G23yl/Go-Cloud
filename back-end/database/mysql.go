@@ -124,13 +124,20 @@ func UpdateAvatar(user *model.User) error {
 
 func CreateFile(storeID uint, filePath, fileName string, size int64) error {
 	arr := strings.Split(fileName, ".")
-	pureName, suffix := arr[0], "."+arr[1]
+	suffix := "." + arr[1]
 	return db.Create(&model.File{
 		FileStoreID: storeID,
-		FileName:    pureName,
+		FileName:    fileName,
 		FilePath:    filePath,
 		FileSize:    size,
-		Suffix:      suffix,
 		Type:        util_file.GetFileType(suffix),
 	}).Error
+}
+
+func GetInPathFiles(path string) ([]model.File, []model.Folder) {
+	var files []model.File
+	var folders []model.Folder
+	db.Where("file_path = ?", path).Find(&files)
+	db.Where("file_path = ?", path).Find(&folders)
+	return files, folders
 }

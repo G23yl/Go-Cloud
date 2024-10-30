@@ -38,6 +38,7 @@ func SetUpRouter() *gin.Engine {
 		cloud.GET("/audios", services.Audios)
 		cloud.GET("/others", services.Others)
 		cloud.POST("/files", services.Upload)
+		cloud.GET("/files", services.GetInPathFiles)
 	}
 	return router
 }
