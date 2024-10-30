@@ -6,7 +6,7 @@ import (
 	"disk/database"
 	"disk/model/request"
 	"disk/model/response"
-	"disk/utils/util_file"
+	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -176,35 +176,36 @@ func Upload(ctx *gin.Context) {
 		return
 	}
 	// 获取仓库ID
-	storeID, _, _ := database.GetStoreInfo(userID.(uint))
-	// 获取文件的路由
-	var fileInfo request.UploadReq
-	if err := ctx.ShouldBind(&fileInfo); err != nil {
-		response.RequestError(ctx, response.ErrorParams)
-		return
-	}
+	storeID, capacity, size := database.GetStoreInfo(userID.(uint))
 	// 获取文件
 	file, err := ctx.FormFile("file")
 	if err != nil {
 		response.RequestError(ctx, response.ErrorFileUpload)
 		return
 	}
-	// 获取文件要保存的位置并判断有没有重复文件，如果有，就不允许上传
-	dir, _ := os.Getwd()
-	fileFolder := dir + "/static/local_store" + fileInfo.FilePath
-	allFiles, err := util_file.GetAllFiles(fileFolder)
-	if err != nil {
-		response.RequestError(ctx, response.ErrorFilePathNotExist)
+	// 判断是否超过仓库容量，超过直接返回
+	if capacity < size+file.Size {
+		response.RequestError(ctx, response.ErrorStoreFull)
 		return
 	}
-	for _, fileName := range allFiles {
-		if fileName == file.Filename {
-			response.RequestError(ctx, response.ErrorFileExist)
-			return
-		}
+	// 获取文件的路由
+	var fileInfo request.UploadReq
+	if err := ctx.ShouldBind(&fileInfo); err != nil {
+		response.RequestError(ctx, response.ErrorParams)
+		return
+	}
+	// 获取文件要保存的位置并判断有没有重复文件，如果有，就不允许上传
+	// 查询数据库中是否有filename相同且filepath也相同的文件
+	if exist := database.CheckFileExists(storeID, file.Filename, fileInfo.FilePath); exist {
+		response.RequestError(ctx, response.ErrorFileExist)
+		return
 	}
 	// 没有呢
 	// 保存文件
+	dir, _ := os.Getwd()
+	// 需要给每个用户都分配一个空间
+	fileFolder := fmt.Sprintf("%s/static/local_store/user_%d/%s", dir, userID.(uint), fileInfo.FilePath)
+	//FIXME 感觉有个bug在这里，如果路径对应的文件夹不存在的话应该要报错的，但是只要用户不输入保存位置就不会出现这个bug，以后再说
 	err = ctx.SaveUploadedFile(file, fileFolder+"/"+file.Filename)
 	if err != nil {
 		response.RequestError(ctx, response.ErrorFileUpload)

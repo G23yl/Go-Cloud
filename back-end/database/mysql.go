@@ -123,15 +123,26 @@ func UpdateAvatar(user *model.User) error {
 }
 
 func CreateFile(storeID uint, filePath, fileName string, size int64) error {
-	arr := strings.Split(fileName, ".")
-	suffix := "." + arr[1]
-	return db.Create(&model.File{
-		FileStoreID: storeID,
-		FileName:    fileName,
-		FilePath:    filePath,
-		FileSize:    size,
-		Type:        util_file.GetFileType(suffix),
-	}).Error
+	// 采用事务，防止出现文件保存了，但是仓库大小没更新的情况
+	return db.Transaction(func(tx *gorm.DB) error {
+		arr := strings.Split(fileName, ".")
+		suffix := "." + arr[1]
+		err := db.Create(&model.File{
+			FileStoreID: storeID,
+			FileName:    fileName,
+			FilePath:    filePath,
+			FileSize:    size,
+			Type:        util_file.GetFileType(suffix),
+		}).Error
+		if err != nil {
+			return err
+		}
+		// 更新仓库的大小
+		var store model.FileStore
+		db.Where("ID = ?", storeID).First(&store)
+		store.CurrentSize += size
+		return db.Save(&store).Error
+	})
 }
 
 func GetInPathFiles(path string) ([]model.File, []model.Folder) {
@@ -140,4 +151,8 @@ func GetInPathFiles(path string) ([]model.File, []model.Folder) {
 	db.Where("file_path = ?", path).Find(&files)
 	db.Where("file_path = ?", path).Find(&folders)
 	return files, folders
+}
+
+func CheckFileExists(storeID uint, filename, filepath string) bool {
+	return db.Where("file_store_id = ? and file_name = ? and file_path = ?", storeID, filename, filepath).RowsAffected != 0
 }

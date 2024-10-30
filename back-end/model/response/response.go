@@ -48,6 +48,7 @@ var ErrorAvatarUpload Error = Error{"头像上传失败"}
 var ErrorFileUpload Error = Error{"文件上传失败"}
 var ErrorFilePathNotExist Error = Error{"文件路径不存在"}
 var ErrorFileExist Error = Error{"同名文件已存在"}
+var ErrorStoreFull Error = Error{"网盘已满，无法上传"}
 
 func newResponse(code int, msg string, data any) gin.H {
 	return gin.H{
