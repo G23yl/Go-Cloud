@@ -69,6 +69,7 @@ export interface DIVAOData {
   fileID: number
   fileName: string
   fileSize: number
+  fileSizeStr: string
   updateTime: string
   downloadNum: number
   fileUrl: string

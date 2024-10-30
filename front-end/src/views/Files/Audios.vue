@@ -4,17 +4,21 @@ import Title from "@/components/Title/Title.vue"
 import type { DIVAOData } from "@/types/types"
 import { usePageData } from "@/hooks/pages"
 import Table from "@/components/Table/Table.vue"
+import { getFileSizeStr } from "@/utils/util/util"
 
+let data = ref<DIVAOData[]>()
 onBeforeMount(async () => {
-  const { docs } = usePageData()
+  const { audios } = usePageData()
   try {
-    const res = await docs()
+    const res = await audios()
     if (res) {
-      data = res.data
+      data.value = res.data
+      data.value.forEach((item) => {
+        item.fileSizeStr = getFileSizeStr(item.fileSize)
+      })
     }
   } catch (error) {}
 })
-let data: DIVAOData[] | undefined
 const title = ref("我的音频")
 </script>
 

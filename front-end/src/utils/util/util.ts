@@ -12,3 +12,16 @@ export function getTimeStr() {
     return "evening"
   }
 }
+
+// 转换文件大小
+export function getFileSizeStr(fileSize: number) {
+  if (fileSize < 1024) {
+    return fileSize + " B"
+  } else if (fileSize < 1024 * 1024) {
+    return (fileSize / 1024).toFixed(2) + " KB"
+  } else if (fileSize < 1024 * 1024 * 1024) {
+    return (fileSize / 1024 / 1024).toFixed(2) + " MB"
+  } else {
+    return (fileSize / 1024 / 1024 / 1024).toFixed(2) + " GB"
+  }
+}

@@ -29,7 +29,7 @@ window.addEventListener("resize", () => {
       </el-table-column>
       <el-table-column label="大小" width="180">
         <template #default="scope">
-          <el-tag type="primary" round>{{ scope.row.fileSize }} KB</el-tag>
+          <el-tag type="primary" round>{{ scope.row.fileSizeStr }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="下载次数">

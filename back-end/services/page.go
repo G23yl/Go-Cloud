@@ -74,7 +74,7 @@ func Images(ctx *gin.Context) {
 	// 获取仓库ID
 	storeID, _, _ := database.GetStoreInfo(userID.(uint))
 	// 获取images文件
-	primitiveImages := database.GetCategoryFiles(storeID, 1)
+	primitiveImages := database.GetCategoryFiles(storeID, 2)
 	images := make([]response.CategoryRes, len(primitiveImages))
 	for idx, image := range primitiveImages {
 		images[idx] = response.CategoryRes{
@@ -100,7 +100,7 @@ func Videos(ctx *gin.Context) {
 	// 获取仓库ID
 	storeID, _, _ := database.GetStoreInfo(userID.(uint))
 	// 获取videos文件
-	primitiveVideos := database.GetCategoryFiles(storeID, 1)
+	primitiveVideos := database.GetCategoryFiles(storeID, 3)
 	videos := make([]response.CategoryRes, len(primitiveVideos))
 	for idx, video := range primitiveVideos {
 		videos[idx] = response.CategoryRes{
