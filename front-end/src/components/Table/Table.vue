@@ -18,8 +18,15 @@ window.addEventListener("resize", () => {
 
 <template>
   <div class="content">
-    <el-table :data="data" style="width: 98%" border stripe :max-height="tableHeight">
-      <el-table-column label="名称" width="180">
+    <el-table
+      :data="data"
+      style="width: 98%"
+      border
+      stripe
+      :max-height="tableHeight"
+      table-layout="auto"
+    >
+      <el-table-column label="名称">
         <template #default="scope">
           <div style="display: flex; align-items: center">
             <font-awesome-icon :icon="icon" :size="size" :style="{ color: color }" />
@@ -27,19 +34,19 @@ window.addEventListener("resize", () => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="大小" width="180">
+      <el-table-column label="大小" width="180px">
         <template #default="scope">
           <el-tag type="primary" round>{{ scope.row.fileSizeStr }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="下载次数">
+      <el-table-column label="下载次数" width="180px">
         <template #default="scope">
           <el-tag type="success" round>{{ scope.row.downloadNum }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="修改日期">
         <template #default="scope">
-          <el-tag type="info" round>{{ scope.row.updateTime }}</el-tag>
+          <el-tag type="info" round>{{ new Date(scope.row.updateTime).toLocaleString() }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">
