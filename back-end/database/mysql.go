@@ -154,5 +154,6 @@ func GetInPathFiles(path string) ([]model.File, []model.Folder) {
 }
 
 func CheckFileExists(storeID uint, filename, filepath string) bool {
-	return db.Where("file_store_id = ? and file_name = ? and file_path = ?", storeID, filename, filepath).RowsAffected != 0
+	var file model.File
+	return db.Where("file_store_id = ? and file_name = ? and file_path = ?", storeID, filename, filepath).First(&file).RowsAffected != 0
 }
