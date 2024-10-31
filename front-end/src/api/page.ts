@@ -78,11 +78,13 @@ export const filesReq = async (path: string) => {
 }
 
 // 删除文件
-export const deleteFReq = async (fileID: number) => {
+export const deleteFReq = async (filePath: string, fileName: string, fileID: number) => {
   try {
     const res = await request.delete<any, BasicResponse>("/cloud/files", {
       params: {
         fileID: fileID,
+        filePath: filePath,
+        fileName: fileName,
       },
     })
     return res

@@ -8,6 +8,7 @@ import (
 	"disk/model/response"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -204,9 +205,12 @@ func Upload(ctx *gin.Context) {
 	// 保存文件
 	dir, _ := os.Getwd()
 	// 需要给每个用户都分配一个空间
-	fileFolder := fmt.Sprintf("%s/static/local_store/user_%d/%s", dir, userID.(uint), fileInfo.FilePath)
+	localFilePath := fmt.Sprintf("%s/static/local_store/user_%d%s", dir, userID.(uint), fileInfo.FilePath)
+	if fileInfo.FilePath != "/" {
+		localFilePath += "/"
+	}
 	//FIXME 感觉有个bug在这里，如果路径对应的文件夹不存在的话应该要报错的，但是只要用户不输入保存位置就不会出现这个bug，以后再说
-	err = ctx.SaveUploadedFile(file, fileFolder+"/"+file.Filename)
+	err = ctx.SaveUploadedFile(file, localFilePath+file.Filename)
 	if err != nil {
 		response.RequestError(ctx, response.ErrorFileUpload)
 		return
@@ -251,4 +255,45 @@ func GetInPathFiles(ctx *gin.Context) {
 		}
 	}
 	response.Success(ctx, "获取成功", res)
+}
+
+// 删除文件
+func DeleteFile(ctx *gin.Context) {
+	// 获取用户id
+	userID, ok := ctx.Get("userID")
+	if !ok {
+		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
+	}
+	// 获取仓库ID
+	storeID, _, _ := database.GetStoreInfo(userID.(uint))
+	// 获取删除文件id
+	fileID := ctx.Query("fileID")
+	IFileID, _ := strconv.Atoi(fileID)
+	filePath := ctx.Query("filePath")
+	fileName := ctx.Query("fileName")
+	// 删除文件时，应该先删除本地文件，然后删除数据库信息
+	// 如果先删除数据库成功，但是后删除本地文件失败，那么用户看不到文件，就不能再重试删除文件了
+	// 如果先删除本地文件成功，但是后删除数据库失败，那么用户依然看得到文件，可以重试删除文件
+	// 删除本地文件
+	dir, _ := os.Getwd()
+	localFilePath := fmt.Sprintf("%s/static/local_store/user_%d%s", dir, userID.(uint), filePath)
+	if filePath != "/" {
+		localFilePath += "/"
+	}
+	fmt.Println(localFilePath)
+	err := os.Remove(localFilePath + fileName)
+	if err != nil {
+		fmt.Println("111")
+		response.ServerError(ctx, response.ErrorDeleteFile)
+		return
+	}
+	// 删除数据库
+	err = database.DeleteFile(storeID, uint(IFileID))
+	if err != nil {
+		response.ServerError(ctx, response.ErrorDeleteFile)
+		return
+	}
+	// 删除成功
+	response.Success(ctx, "删除成功", nil)
 }

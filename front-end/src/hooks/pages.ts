@@ -41,8 +41,8 @@ export const usePageData = () => {
     return await filesReq(path)
   }
   // 删除文件
-  async function deleteF(fileID: number) {
-    return await deleteFReq(fileID)
+  async function deleteF(filePath: string, fileName: string, fileID: number) {
+    return await deleteFReq(filePath, fileName, fileID)
   }
 
   return { index, docs, images, videos, audios, others, files, deleteF }

@@ -119,7 +119,7 @@ const deleteFile = (fileName: string, fileID: number) => {
         // 如果确定删除，就开始加载
         instance.confirmButtonLoading = true
         instance.confirmButtonText = "删除中..."
-        const res = await deleteF(fileID)
+        const res = await deleteF(query, fileName, fileID)
         if (res) {
           ElNotification({
             type: "success",

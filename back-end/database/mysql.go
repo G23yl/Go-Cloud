@@ -127,7 +127,7 @@ func CreateFile(storeID uint, filePath, fileName string, size int64) error {
 	return db.Transaction(func(tx *gorm.DB) error {
 		arr := strings.Split(fileName, ".")
 		suffix := "." + arr[1]
-		err := db.Create(&model.File{
+		err := tx.Create(&model.File{
 			FileStoreID: storeID,
 			FileName:    fileName,
 			FilePath:    filePath,
@@ -139,9 +139,9 @@ func CreateFile(storeID uint, filePath, fileName string, size int64) error {
 		}
 		// 更新仓库的大小
 		var store model.FileStore
-		db.Where("ID = ?", storeID).First(&store)
+		tx.Where("ID = ?", storeID).First(&store)
 		store.CurrentSize += size
-		return db.Save(&store).Error
+		return tx.Save(&store).Error
 	})
 }
 
@@ -156,4 +156,21 @@ func GetInPathFiles(path string) ([]model.File, []model.Folder) {
 func CheckFileExists(storeID uint, filename, filepath string) bool {
 	var file model.File
 	return db.Where("file_store_id = ? and file_name = ? and file_path = ?", storeID, filename, filepath).First(&file).RowsAffected != 0
+}
+
+func DeleteFile(storeID uint, fileID uint) error {
+	// 要用事务
+	return db.Transaction(func(tx *gorm.DB) error {
+		var file model.File
+		tx.Where("file_store_id = ? and ID = ?", storeID, fileID).First(&file)
+		err := tx.Where("file_store_id = ? and ID = ?", storeID, fileID).Delete(&model.File{}).Error
+		if err != nil {
+			return err
+		}
+		// 更新仓库的大小
+		var store model.FileStore
+		tx.Where("ID = ?", storeID).First(&store)
+		store.CurrentSize -= file.FileSize
+		return tx.Save(&store).Error
+	})
 }
