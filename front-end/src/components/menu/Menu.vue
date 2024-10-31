@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { MenuItems } from "@/types/types"
 import { deleteUser, getUser } from "@/utils/user"
 import { ElMessage } from "element-plus"
-import { onMounted, reactive, ref, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
 // 获取router
@@ -52,7 +51,7 @@ const logout = () => {
               <font-awesome-icon class="icon" :icon="['fas', 'chart-simple']" size="lg" />
               主页
             </el-menu-item>
-            <el-menu-item index="/dashboard/files?path=/">
+            <el-menu-item index="/dashboard/files">
               <font-awesome-icon class="icon" :icon="['fas', 'folder']" size="lg" />
               我的文件
             </el-menu-item>

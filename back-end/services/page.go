@@ -57,7 +57,7 @@ func Docs(ctx *gin.Context) {
 			FileSize:    doc.FileSize,
 			UpdateTime:  doc.UpdatedAt,
 			DownloadNum: doc.DownloadCount,
-			FileUrl:     doc.FilePath,
+			FilePath:    doc.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", docs)
@@ -83,7 +83,7 @@ func Images(ctx *gin.Context) {
 			FileSize:    image.FileSize,
 			UpdateTime:  image.UpdatedAt,
 			DownloadNum: image.DownloadCount,
-			FileUrl:     image.FilePath,
+			FilePath:    image.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", images)
@@ -109,7 +109,7 @@ func Videos(ctx *gin.Context) {
 			FileSize:    video.FileSize,
 			UpdateTime:  video.UpdatedAt,
 			DownloadNum: video.DownloadCount,
-			FileUrl:     video.FilePath,
+			FilePath:    video.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", videos)
@@ -135,7 +135,7 @@ func Audios(ctx *gin.Context) {
 			FileSize:    audio.FileSize,
 			UpdateTime:  audio.UpdatedAt,
 			DownloadNum: audio.DownloadCount,
-			FileUrl:     audio.FilePath,
+			FilePath:    audio.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", audios)
@@ -161,7 +161,7 @@ func Others(ctx *gin.Context) {
 			FileSize:    other.FileSize,
 			UpdateTime:  other.UpdatedAt,
 			DownloadNum: other.DownloadCount,
-			FileUrl:     other.FilePath,
+			FilePath:    other.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", others)
@@ -233,19 +233,21 @@ func GetInPathFiles(ctx *gin.Context) {
 			FileID:     f.ID,
 			FileName:   f.FolderName,
 			UpdateTime: f.UpdatedAt,
-			FileType:   "dir",
+			Type:       "dir",
+			FileType:   0,
 			FilePath:   f.FilePath,
 		}
 	}
 	for idx, f := range files {
 		res[idx+len(folders)] = response.FFRes{
-			FileID:        f.ID,
-			FileName:      f.FileName,
-			UpdateTime:    f.UpdatedAt,
-			FileType:      "file",
-			FileSize:      f.FileSize,
-			DownloadCount: f.DownloadCount,
-			FilePath:      f.FilePath,
+			FileID:      f.ID,
+			FileName:    f.FileName,
+			UpdateTime:  f.UpdatedAt,
+			Type:        "file",
+			FileType:    f.Type,
+			FileSize:    f.FileSize,
+			DownloadNum: f.DownloadCount,
+			FilePath:    f.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", res)

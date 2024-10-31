@@ -10,6 +10,7 @@ import { library } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import {
   faChartSimple,
+  faCircleCheck,
   faCircleInfo,
   faCircleQuestion,
   faCloudArrowDown,
@@ -19,6 +20,7 @@ import {
   faFileAudio,
   faFileCircleQuestion,
   faFileImage,
+  faFileLines,
   faFileVideo,
   faFileWord,
   faFilm,
@@ -28,10 +30,12 @@ import {
   faLayerGroup,
   faMusic,
   faPenToSquare,
+  faPlus,
   faRightToBracket,
   faShareNodes,
   faTrashCan,
   faUser,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons"
 import "vue-data-ui/style.css"
 import { VueUiRadar } from "vue-data-ui"
@@ -59,7 +63,12 @@ library.add(
   faMusic,
   faCircleQuestion,
   faUser,
-  faEnvelope
+  faEnvelope,
+  faPlus,
+  faFileLines,
+  faCircleCheck,
+  faXmark,
+  faCircleQuestion
 )
 
 const app = createApp(App)

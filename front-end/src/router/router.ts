@@ -38,6 +38,11 @@ const router = createRouter({
           meta: {
             requireAuth: true,
           },
+          beforeEnter(to, from) {
+            if (to.fullPath === "/dashboard/files") {
+              to.fullPath = "/dashboard/files?path=/"
+            }
+          },
           props: (route) => ({ query: route.query.path }),
         },
         {

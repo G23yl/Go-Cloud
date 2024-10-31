@@ -15,6 +15,7 @@ onBeforeMount(async () => {
       data.value = res.data
       data.value.forEach((item) => {
         item.fileSizeStr = getFileSizeStr(item.fileSize)
+        item.fileIcon = ["fas", "film"]
       })
     }
   } catch (error) {}
@@ -29,7 +30,7 @@ const title = ref("我的视频")
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
-      <Table :data="data ? data : []" :icon="['fas', 'film']" />
+      <Table :data="data ? data : []" />
     </el-main>
   </el-container>
 </template>

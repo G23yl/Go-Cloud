@@ -1,6 +1,6 @@
 // 获取数据
 
-import { audiosReq, docsReq, imagesReq, indexReq, othersReq, videosReq } from "@/api/page"
+import { audiosReq, docsReq, filesReq, imagesReq, indexReq, othersReq, videosReq } from "@/api/page"
 
 export const usePageData = () => {
   // index页面数据获取
@@ -27,6 +27,10 @@ export const usePageData = () => {
   async function others() {
     return await othersReq()
   }
+  // 总数据获取
+  async function files(path: string) {
+    return await filesReq(path)
+  }
 
-  return { index, docs, images, videos, audios, others }
+  return { index, docs, images, videos, audios, others, files }
 }

@@ -25,3 +25,21 @@ export function getFileSizeStr(fileSize: number) {
     return (fileSize / 1024 / 1024 / 1024).toFixed(2) + " GB"
   }
 }
+
+// 判断哪种文件类型确定对应icon
+export function getFileTypeIcon(fileType: number) {
+  switch (fileType) {
+    case 0:
+      return ["fas", "folder"]
+    case 1:
+      return ["fas", "file"]
+    case 2:
+      return ["fas", "image"]
+    case 3:
+      return ["fas", "film"]
+    case 4:
+      return ["fas", "music"]
+    default:
+      return ["fas", "circle-question"]
+  }
+}

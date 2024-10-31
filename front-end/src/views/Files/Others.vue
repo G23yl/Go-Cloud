@@ -15,6 +15,7 @@ onBeforeMount(async () => {
       data.value = res.data
       data.value.forEach((item) => {
         item.fileSizeStr = getFileSizeStr(item.fileSize)
+        item.fileIcon = ["fas", "circle-question"]
       })
     }
   } catch (error) {}
@@ -29,7 +30,7 @@ const title = ref("其他文件")
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
-      <Table :data="data ? data : []" :icon="['fas', 'circle-question']" />
+      <Table :data="data ? data : []" />
     </el-main>
   </el-container>
 </template>
