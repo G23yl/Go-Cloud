@@ -120,11 +120,11 @@ export const useDataUI = () => {
         },
         comments: { show: true, showInTooltip: true, width: 100, offsetY: 0, offsetX: 0 },
         legend: {
-          show: false,
+          show: true,
           bold: false,
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "#eeeeee",
           color: "#1A1A1A",
-          fontSize: 16,
+          fontSize: 13,
           roundingValue: 0,
           roundingPercentage: 0,
         },
@@ -166,7 +166,7 @@ export const useDataUI = () => {
     style: {
       fontFamily: "inherit",
       chart: {
-        backgroundColor: "eeeeee",
+        backgroundColor: "#eeeeee",
         color: "#1A1A1A",
         animation: { use: true, speed: 0.5, acceleration: 1 },
         layout: {

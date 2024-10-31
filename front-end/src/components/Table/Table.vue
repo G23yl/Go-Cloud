@@ -10,7 +10,7 @@ interface Props {
 }
 const { data, size = "lg", color = "#74c0fc" } = defineProps<Props>()
 const emit = defineEmits<{
-  deleteFile: [fileName: string, fileID: number]
+  deleteFile: [filePath: string, fileName: string, fileID: number]
 }>()
 // 实时更新表格高度
 let tableHeight = ref(document.body.clientHeight - 135)
@@ -96,7 +96,9 @@ const sortByDate = (a: any, b: any) => {
                 type="danger"
                 :icon="Delete"
                 size="small"
-                @click="emit('deleteFile', scope.row.fileName, scope.row.fileID)"
+                @click="
+                  emit('deleteFile', scope.row.filePath, scope.row.fileName, scope.row.fileID)
+                "
               ></el-button>
               <el-button type="primary" :icon="Download" size="small"></el-button>
             </el-button-group>
