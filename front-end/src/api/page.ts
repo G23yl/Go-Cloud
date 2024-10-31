@@ -1,6 +1,6 @@
 // 页面数据获取api
 
-import type { DIVAOResponse, FFResponse, IndexResponse } from "@/types/types"
+import type { BasicResponse, DIVAOResponse, FFResponse, IndexResponse } from "@/types/types"
 import request from "@/utils/axios"
 
 // index页面数据api
@@ -66,7 +66,25 @@ export const othersReq = async () => {
 // 总页面数据api
 export const filesReq = async (path: string) => {
   try {
-    const res = await request.get<any, FFResponse>(`/cloud/files?path=${path}`)
+    const res = await request.get<any, FFResponse>(`/cloud/files`, {
+      params: {
+        path: path,
+      },
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// 删除文件
+export const deleteFReq = async (fileID: number) => {
+  try {
+    const res = await request.delete<any, BasicResponse>("/cloud/files", {
+      params: {
+        fileID: fileID,
+      },
+    })
     return res
   } catch (error) {
     console.log(error)

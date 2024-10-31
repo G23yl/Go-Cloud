@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DIVAOData, FFData } from "@/types/types"
+import { Delete, Download } from "@element-plus/icons-vue"
 import { onMounted, ref } from "vue"
 
 interface Props {
@@ -8,6 +9,9 @@ interface Props {
   color?: string
 }
 const { data, size = "lg", color = "#74c0fc" } = defineProps<Props>()
+const emit = defineEmits<{
+  deleteFile: [fileName: string, fileID: number]
+}>()
 // 实时更新表格高度
 let tableHeight = ref(document.body.clientHeight - 135)
 // 获取鼠标hover在哪一行
@@ -45,6 +49,8 @@ const sortByDate = (a: any, b: any) => {
   }
   return dateA > dateB ? 1 : -1
 }
+// 删除文件操作
+// 需要知道删除文件的路径，删除文件的文件名和文件ID
 </script>
 
 <template>
@@ -58,7 +64,8 @@ const sortByDate = (a: any, b: any) => {
       @cell-mouse-enter="hover"
       @cell-mouse-leave="unhover"
     >
-      <el-table-column label="名称">
+      <!-- <el-table-column type="selection" width="30px" /> -->
+      <el-table-column label="名称" show-overflow-tooltip>
         <template #default="scope">
           <div style="display: flex; align-items: center">
             <font-awesome-icon :icon="scope.row.fileIcon" :size="size" :style="{ color: color }" />
@@ -84,46 +91,15 @@ const sortByDate = (a: any, b: any) => {
       <el-table-column label="操作">
         <template #default="scope">
           <div v-show="scope.row.fileID === hoverLine">
-            <el-tooltip content="删除" placement="top">
-              <font-awesome-icon
-                class="icon"
-                :icon="['fas', 'trash-can']"
-                style="color: #74c0fc"
-                size="lg"
-              />
-            </el-tooltip>
-            <el-tooltip content="下载" placement="top">
-              <font-awesome-icon
-                class="icon"
-                :icon="['fas', 'cloud-arrow-down']"
-                style="color: #74c0fc"
-                size="lg"
-              />
-            </el-tooltip>
-            <el-tooltip content="分享" placement="top">
-              <font-awesome-icon
-                class="icon"
-                :icon="['fas', 'share-nodes']"
-                style="color: #74c0fc"
-                size="lg"
-              />
-            </el-tooltip>
-            <el-tooltip content="重命名" placement="top">
-              <font-awesome-icon
-                class="icon"
-                :icon="['fas', 'pen-to-square']"
-                style="color: #74c0fc"
-                size="lg"
-              />
-            </el-tooltip>
-            <el-tooltip content="预览" placement="top">
-              <font-awesome-icon
-                class="icon"
-                :icon="['fas', 'eye']"
-                style="color: #74c0fc"
-                size="lg"
-              />
-            </el-tooltip>
+            <el-button-group>
+              <el-button
+                type="danger"
+                :icon="Delete"
+                size="small"
+                @click="emit('deleteFile', scope.row.fileName, scope.row.fileID)"
+              ></el-button>
+              <el-button type="primary" :icon="Download" size="small"></el-button>
+            </el-button-group>
           </div>
         </template>
       </el-table-column>

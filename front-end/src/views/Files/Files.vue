@@ -3,9 +3,9 @@ import Title from "@/components/Title/Title.vue"
 import { usePageData } from "@/hooks/pages"
 import { type FFData, type UploadFile } from "@/types/types"
 import { getFileSizeStr, getFileTypeIcon } from "@/utils/util/util"
-import { nextTick, onBeforeMount, ref, useTemplateRef } from "vue"
+import { h, nextTick, onBeforeMount, ref, useTemplateRef } from "vue"
 import Table from "@/components/Table/Table.vue"
-import { ElNotification } from "element-plus"
+import { ElMessageBox, ElNotification } from "element-plus"
 import request from "@/utils/axios"
 
 const title = ref("我的文件")
@@ -18,6 +18,7 @@ const { query = "/" } = defineProps<{
 // 发请求获取当前页面的文件
 let data = ref<FFData[]>([])
 const uploadFileList = ref<UploadFile[]>([])
+const { deleteF } = usePageData()
 
 const getData = async () => {
   const { files } = usePageData()
@@ -103,6 +104,41 @@ const handleUpload = () => {
     }
   })
 }
+const deleteFile = (fileName: string, fileID: number) => {
+  // 弹窗警告
+  ElMessageBox({
+    message: h("p", null, [
+      h("span", null, "确认删除 "),
+      h("div", { style: "font-size: 20px; color: #5170b8" }, fileName + " ?"),
+    ]),
+    showCancelButton: true,
+    confirmButtonText: "删除",
+    cancelButtonText: "取消",
+    beforeClose: async (action, instance, done) => {
+      if (action === "confirm") {
+        // 如果确定删除，就开始加载
+        instance.confirmButtonLoading = true
+        instance.confirmButtonText = "删除中..."
+        const res = await deleteF(fileID)
+        if (res) {
+          ElNotification({
+            type: "success",
+            message: "删除成功",
+          })
+        }
+        // 不管删除失败还是成功都要关闭弹窗
+        instance.confirmButtonLoading = false
+        done()
+      } else {
+        done()
+      }
+    },
+  })
+    .then(() => {
+      nextTick(getData)
+    })
+    .catch(() => {})
+}
 </script>
 
 <template>
@@ -112,7 +148,7 @@ const handleUpload = () => {
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
-      <Table :data="data ? data : []" />
+      <Table :data="data ? data : []" @delete-file="deleteFile" />
       <div class="btn" @click="toggle">
         <font-awesome-icon class="plus" :icon="['fas', 'plus']" style="color: #ffffff" size="lg" />
       </div>
