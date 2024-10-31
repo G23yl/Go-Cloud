@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
 import Title from "@/components/Title/Title.vue"
 import { getUser } from "@/utils/user"
 import useUserStore from "@/store/user"
-import { ElMessage } from "element-plus"
+import { ElNotification } from "element-plus"
+import { nextTick } from "vue"
+import type { User } from "@/types/types"
 
 const title = ref("个人中心")
 const input = ref<HTMLInputElement>()
 const cardRef = ref<HTMLDivElement>()
-let user = getUser()
+let user = ref<User>()
+onMounted(() => {
+  user.value = getUser()
+})
 const { changeAvatar } = useUserStore()
 
 const handleChange = async (e: Event) => {
@@ -18,9 +23,12 @@ const handleChange = async (e: Event) => {
     try {
       const res = await changeAvatar(file)
       if (res) {
-        ElMessage({
+        ElNotification({
           type: "success",
           message: "头像更新成功",
+        })
+        nextTick(() => {
+          location.reload()
         })
       }
     } catch (error) {}
