@@ -174,3 +174,12 @@ func DeleteFile(storeID uint, fileID uint) error {
 		return tx.Save(&store).Error
 	})
 }
+
+// 创建文件夹
+func CreateFolder(storeID uint, path, folderName string) error {
+	return db.Create(&model.Folder{
+		FileStoreID: storeID,
+		FilePath:    path,
+		FolderName:  folderName,
+	}).Error
+}

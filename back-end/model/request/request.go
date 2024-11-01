@@ -20,3 +20,7 @@ type VerifyReq struct {
 type UploadReq struct {
 	FilePath string `json:"filepath" form:"filepath"`
 }
+
+type CreateFolderReq struct {
+	FolderName string `json:"folderName"`
+}

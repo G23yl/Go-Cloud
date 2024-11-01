@@ -297,3 +297,40 @@ func DeleteFile(ctx *gin.Context) {
 	// 删除成功
 	response.Success(ctx, "删除成功", nil)
 }
+
+// 创建文件夹
+func CreateFolder(ctx *gin.Context) {
+	// 获取用户id
+	userID, ok := ctx.Get("userID")
+	if !ok {
+		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
+	}
+	// 获取仓库ID
+	storeID, _, _ := database.GetStoreInfo(userID.(uint))
+	// 获取路径参数
+	path := ctx.Query("path")
+	var folder request.CreateFolderReq
+	if err := ctx.BindJSON(&folder); err != nil {
+		response.RequestError(ctx, response.ErrorParams)
+		return
+	}
+	dir, _ := os.Getwd()
+	localFolderPath := fmt.Sprintf("%s/static/local_store/user_%d%s", dir, userID.(uint), path)
+	if path != "/" {
+		localFolderPath += "/"
+	}
+	fmt.Println(localFolderPath)
+	// 本地创建文件夹
+	err := os.Mkdir(localFolderPath+folder.FolderName, os.ModePerm)
+	if err != nil {
+		fmt.Println("本地已存在文件夹,只需要修改数据库数据即可")
+	}
+	// 修改数据库
+	err = database.CreateFolder(storeID, path, folder.FolderName)
+	if err != nil {
+		response.ServerError(ctx, response.ErrorFolderCreate)
+		return
+	}
+	response.Success(ctx, "文件夹创建成功", nil)
+}
