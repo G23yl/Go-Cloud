@@ -11,6 +11,7 @@ const route = useRoute()
 // 获取到用户登录信息用于显示头像，用户名，邮箱
 const user = getUser()
 let activeIndex = ref("")
+
 // 实现menu刷新依然选中
 onMounted(() => {
   activeIndex.value = route.path
@@ -21,7 +22,6 @@ watch(
     activeIndex.value = route.path
   }
 )
-
 const logout = () => {
   // 删除用户信息
   deleteUser()
@@ -31,12 +31,20 @@ const logout = () => {
     message: "登出成功",
   })
 }
+const GotoHub = () => {
+  window.open("https://github.com/G23yl/Go-Cloud")
+}
 </script>
 
 <template>
   <div class="aside">
     <div class="logo">
-      <img src="../../assets/logo.svg" alt="logo" style="height: 70px" />
+      <img
+        src="../../assets/logo.svg"
+        alt="logo"
+        style="height: 70px; cursor: pointer"
+        @click="GotoHub"
+      />
     </div>
     <el-scrollbar>
       <div class="menu">
@@ -87,7 +95,7 @@ const logout = () => {
               <font-awesome-icon class="icon" :icon="['fas', 'gear']" size="lg" />
               个人中心
             </el-menu-item>
-            <el-menu-item index="/dashboard/help">
+            <el-menu-item index="/dashboard/helps">
               <font-awesome-icon class="icon" :icon="['fas', 'circle-info']" size="lg" />
               帮助
             </el-menu-item>
