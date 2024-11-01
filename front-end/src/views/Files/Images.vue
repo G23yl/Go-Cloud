@@ -4,7 +4,7 @@ import Title from "@/components/Title/Title.vue"
 import type { DIVAOData } from "@/types/types"
 import { usePageData } from "@/hooks/pages"
 import Table from "@/components/Table/Table.vue"
-import { getFileSizeStr } from "@/utils/util/util"
+import { getFileSizeStr, getFileTypeIcon } from "@/utils/util/util"
 import { ElMessageBox, ElNotification } from "element-plus"
 
 let data = ref<DIVAOData[]>()
@@ -19,7 +19,7 @@ const getData = async () => {
       data.value = res.data
       data.value.forEach((item) => {
         item.fileSizeStr = getFileSizeStr(item.fileSize)
-        item.fileIcon = ["fas", "image"]
+        item.icon = getFileTypeIcon(2)
       })
     }
   } catch (error) {}

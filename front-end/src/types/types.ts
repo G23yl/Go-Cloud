@@ -73,7 +73,7 @@ export interface DIVAOData {
   updateTime: string
   downloadNum: number
   filePath: string
-  fileIcon: string[]
+  icon: IconInfo
 }
 export interface DIVAOResponse extends BasicResponse {
   data: DIVAOData[]
@@ -87,6 +87,10 @@ export interface AvatarResponse extends BasicResponse {
 }
 
 // 总文件响应
+export interface IconInfo {
+  icon: string[]
+  color: string
+}
 export interface FFData {
   fileID: number
   fileName: string
@@ -97,7 +101,7 @@ export interface FFData {
   filePath: string
   type: string // 如果是dir，那么忽略fileSize和downloadCount
   fileType: number
-  fileIcon: string[] // font-awesome的icon
+  icon: IconInfo
 }
 export interface FFResponse extends BasicResponse {
   data: FFData[]

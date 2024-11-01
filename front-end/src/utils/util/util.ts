@@ -1,5 +1,7 @@
 // 工具函数
 
+import type { IconInfo } from "@/types/types"
+
 // 获取时间，返回morning，afternoon，evening
 export function getTimeStr() {
   const time = new Date()
@@ -27,19 +29,19 @@ export function getFileSizeStr(fileSize: number) {
 }
 
 // 判断哪种文件类型确定对应icon
-export function getFileTypeIcon(fileType: number) {
+export function getFileTypeIcon(fileType: number): IconInfo {
   switch (fileType) {
     case 0:
-      return ["fas", "folder"]
+      return { icon: ["fas", "folder"], color: "#ffd666" }
     case 1:
-      return ["fas", "file"]
+      return { icon: ["fas", "file-lines"], color: "#7f9bb8" }
     case 2:
-      return ["fas", "image"]
+      return { icon: ["fas", "image"], color: "#1388d3" }
     case 3:
-      return ["fas", "film"]
+      return { icon: ["fas", "film"], color: "#8d4be9" }
     case 4:
-      return ["fas", "music"]
+      return { icon: ["fas", "music"], color: "#dc7c73" }
     default:
-      return ["fas", "circle-question"]
+      return { icon: ["fas", "circle-question"], color: "#dedfe0" }
   }
 }

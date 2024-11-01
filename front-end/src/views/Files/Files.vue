@@ -20,7 +20,7 @@ const { query = "/" } = defineProps<{
   query: string
 }>()
 // 发请求获取当前页面的文件
-let data = ref<FFData[]>([])
+let data = ref<FFData[]>()
 const uploadFileList = ref<UploadFile[]>([])
 const { deleteF, createFolder } = usePageData()
 
@@ -34,9 +34,8 @@ const getData = async () => {
         if (item.type === "file") {
           item.fileSizeStr = getFileSizeStr(item.fileSize)
         }
-        item.fileIcon = getFileTypeIcon(item.fileType)
+        item.icon = getFileTypeIcon(item.fileType)
       })
-      console.log(data.value)
     }
   } catch (error) {}
 }
@@ -76,7 +75,7 @@ const handleDirSelect = () => {
 }
 const handleChange = () => {
   uploadFileList.value = []
-  if (inputRef.value && inputRef.value.files) {
+  if (inputRef.value && inputRef.value.files && data.value) {
     const fileList = inputRef.value.files
     for (let i = 0; i < fileList.length; i++) {
       const uploadFile: UploadFile = {
@@ -176,7 +175,7 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
-      <Table :data="data" @delete-file="deleteFile" />
+      <Table :data="data" isdorf="F" @delete-file="deleteFile" />
       <div class="mul-btns">
         <div class="btn" @click="toggle">
           <font-awesome-icon :icon="['fas', 'plus']" style="color: #ffffff" size="lg" />
