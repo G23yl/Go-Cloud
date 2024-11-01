@@ -2,6 +2,7 @@
 import type { DIVAOData, FFData } from "@/types/types"
 import { Delete, Download } from "@element-plus/icons-vue"
 import { onMounted, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
 interface Props {
   data: DIVAOData[] | FFData[]
@@ -16,6 +17,8 @@ const emit = defineEmits<{
 let tableHeight = ref(document.body.clientHeight - 135)
 // 获取鼠标hover在哪一行
 const hoverLine = ref<number>()
+const route = useRoute()
+const router = useRouter()
 
 onMounted(() => {
   tableHeight.value = document.body.clientHeight - 135
@@ -49,8 +52,16 @@ const sortByDate = (a: any, b: any) => {
   }
   return dateA > dateB ? 1 : -1
 }
-// 删除文件操作
-// 需要知道删除文件的路径，删除文件的文件名和文件ID
+const doubleClickEnter = (row: any) => {
+  if (row.type === "dir") {
+    let nextPath = route.fullPath
+    if (data[0].filePath !== "/") {
+      nextPath += "/"
+    }
+    nextPath += row.fileName
+    router.push(nextPath)
+  }
+}
 </script>
 
 <template>
@@ -63,6 +74,7 @@ const sortByDate = (a: any, b: any) => {
       table-layout="auto"
       @cell-mouse-enter="hover"
       @cell-mouse-leave="unhover"
+      @row-dblclick="doubleClickEnter"
     >
       <!-- <el-table-column type="selection" width="30px" /> -->
       <el-table-column label="名称" show-overflow-tooltip>
@@ -75,12 +87,16 @@ const sortByDate = (a: any, b: any) => {
       </el-table-column>
       <el-table-column label="大小" width="180px" sortable :sort-method="sortBySize">
         <template #default="scope">
-          <el-tag type="primary" round>{{ scope.row.fileSizeStr }}</el-tag>
+          <el-tag type="primary" round v-if="scope.row.fileSizeStr">{{
+            scope.row.fileSizeStr
+          }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="下载次数" width="180px" sortable :sort-method="sortByCount">
         <template #default="scope">
-          <el-tag type="success" round>{{ scope.row.downloadNum }}</el-tag>
+          <el-tag type="success" round v-if="scope.row.fileSizeStr">{{
+            scope.row.downloadNum
+          }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="修改日期" sortable :sort-method="sortByDate">
@@ -90,7 +106,7 @@ const sortByDate = (a: any, b: any) => {
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <div v-show="scope.row.fileID === hoverLine">
+          <div v-show="scope.row.fileSizeStr && scope.row.fileID === hoverLine">
             <el-button-group>
               <el-button
                 type="danger"

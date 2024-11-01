@@ -36,6 +36,7 @@ const getData = async () => {
         }
         item.fileIcon = getFileTypeIcon(item.fileType)
       })
+      console.log(data.value)
     }
   } catch (error) {}
 }
@@ -175,7 +176,7 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
-      <Table :data="data ? data : []" @delete-file="deleteFile" />
+      <Table :data="data" @delete-file="deleteFile" />
       <div class="mul-btns">
         <div class="btn" @click="toggle">
           <font-awesome-icon :icon="['fas', 'plus']" style="color: #ffffff" size="lg" />
