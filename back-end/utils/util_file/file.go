@@ -27,7 +27,7 @@ var (
 	DocType   = []string{".doc", ".docx", ".txt", ".pdf", ".md", ".xls"}
 	ImgType   = []string{".jpg", ".png", ".gif", ".jpeg", ".svg"}
 	VideoType = []string{".mp4", ".avi", ".mov", ".rmvb", ".rm"}
-	AudioType = []string{".mp3", ".cda", ".wav", ".wma", ".ogg"}
+	AudioType = []string{".mp3", ".cda", ".wav", ".wma", ".ogg", ".m4a"}
 )
 
 // 判断文件类型
