@@ -92,3 +92,19 @@ export const deleteFReq = async (filePath: string, fileName: string, fileID: num
     console.log(error)
   }
 }
+
+// 创建文件夹
+export const createFolderReq = async (path: string, folderName: string) => {
+  try {
+    const res = await request.post<any, BasicResponse>(
+      "/cloud/folders",
+      { folderName: folderName },
+      {
+        params: {
+          path: path,
+        },
+      }
+    )
+    return res
+  } catch (error) {}
+}

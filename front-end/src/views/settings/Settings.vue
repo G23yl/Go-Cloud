@@ -99,7 +99,6 @@ const leave = () => {
   justify-content: center;
   align-items: center;
   .card {
-    box-sizing: border-box;
     width: 300px;
     height: calc(100vh - 135px);
     // height: 100vh;

@@ -9,8 +9,12 @@ import { ElMessageBox, ElNotification } from "element-plus"
 import request from "@/utils/axios"
 
 const title = ref("我的文件")
+// 上传页面ref
 const pannelRef = useTemplateRef("pannelRef")
+// 上传文件input ref
 const inputRef = useTemplateRef("inputRef")
+// 上传文件夹input ref
+const dirInputRef = useTemplateRef("dirInputRef")
 // 获取到uri中的path参数
 const { query = "/" } = defineProps<{
   query: string
@@ -18,7 +22,7 @@ const { query = "/" } = defineProps<{
 // 发请求获取当前页面的文件
 let data = ref<FFData[]>([])
 const uploadFileList = ref<UploadFile[]>([])
-const { deleteF } = usePageData()
+const { deleteF, createFolder } = usePageData()
 
 const getData = async () => {
   const { files } = usePageData()
@@ -43,11 +47,31 @@ const toggle = () => {
     const padding = pannelRef.value.style.padding
     pannelRef.value.style.width = width === "0px" || width === "" ? "750px" : "0"
     pannelRef.value.style.height = height === "0px" || width === "" ? "500px" : "0"
-    pannelRef.value.style.padding = padding === "0px" || padding === "" ? "20px" : "0"
+    pannelRef.value.style.padding = padding === "0px" || padding === "" ? "10px" : "0"
   }
+}
+const toggleCreate = () => {
+  ElMessageBox.prompt("文件夹名称", "创建文件夹", {
+    confirmButtonText: "创建",
+    cancelButtonText: "取消",
+  })
+    .then(async ({ value }) => {
+      const res = await createFolder(query, value)
+      if (res) {
+        ElNotification({
+          type: "success",
+          message: "创建文件夹成功",
+        })
+        nextTick(getData)
+      }
+    })
+    .catch(() => {})
 }
 const handleSelect = () => {
   inputRef.value?.click()
+}
+const handleDirSelect = () => {
+  dirInputRef.value?.click()
 }
 const handleChange = () => {
   uploadFileList.value = []
@@ -69,6 +93,9 @@ const handleChange = () => {
       uploadFileList.value.push(uploadFile)
     }
   }
+}
+const handleDirChange = (e: Event) => {
+  console.log(e)
 }
 const handleRemove = (filename: string) => {
   uploadFileList.value = uploadFileList.value.filter((item) => item.file.name !== filename)
@@ -149,16 +176,29 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
     <el-divider style="width: 99%"></el-divider>
     <el-main>
       <Table :data="data ? data : []" @delete-file="deleteFile" />
-      <div class="btn" @click="toggle">
-        <font-awesome-icon class="plus" :icon="['fas', 'plus']" style="color: #ffffff" size="lg" />
+      <div class="mul-btns">
+        <div class="btn" @click="toggle">
+          <font-awesome-icon :icon="['fas', 'plus']" style="color: #ffffff" size="lg" />
+        </div>
+        <div class="folder" @click="toggleCreate">
+          <font-awesome-icon :icon="['fas', 'folder-plus']" style="color: #ffffff" size="lg" />
+        </div>
       </div>
     </el-main>
     <div ref="pannelRef" class="pannel">
       <el-scrollbar>
         <div class="pannel-content">
           <el-button type="primary" @click="handleSelect">选择文件</el-button>
-          <el-button type="primary" @click="handleUpload">上传文件</el-button>
+          <el-button type="warning" @click="handleDirSelect">选择文件夹</el-button>
+          <el-button type="success" @click="handleUpload">上传</el-button>
           <input ref="inputRef" type="file" style="display: none" multiple @change="handleChange" />
+          <input
+            ref="dirInputRef"
+            type="file"
+            style="display: none"
+            webkitdirectory
+            @change="handleDirChange"
+          />
           <ul class="list">
             <li class="l" v-for="file in uploadFileList" :key="file.file.name">
               <div class="upper">
@@ -207,15 +247,20 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
 * {
   box-sizing: border-box;
 }
-.btn {
-  width: 50px;
-  height: 50px;
+.mul-btns {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+.btn {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background-color: $aside-account-bg-color;
-  z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -225,8 +270,24 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
     transform: scale(1.05) rotate(180deg);
   }
 }
+.folder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: $aside-account-bg-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  }
+}
 .pannel {
-  box-sizing: border-box;
   position: fixed;
   top: 50%;
   left: 50%;

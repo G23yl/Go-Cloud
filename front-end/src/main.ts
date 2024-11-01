@@ -25,6 +25,7 @@ import {
   faFileWord,
   faFilm,
   faFolder,
+  faFolderPlus,
   faGear,
   faImage,
   faLayerGroup,
@@ -68,7 +69,8 @@ library.add(
   faFileLines,
   faCircleCheck,
   faXmark,
-  faCircleQuestion
+  faCircleQuestion,
+  faFolderPlus
 )
 
 const app = createApp(App)

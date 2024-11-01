@@ -9,6 +9,7 @@ import {
   othersReq,
   videosReq,
   deleteFReq,
+  createFolderReq,
 } from "@/api/page"
 
 export const usePageData = () => {
@@ -45,5 +46,9 @@ export const usePageData = () => {
     return await deleteFReq(filePath, fileName, fileID)
   }
 
-  return { index, docs, images, videos, audios, others, files, deleteF }
+  async function createFolder(path: string, folderName: string) {
+    return await createFolderReq(path, folderName)
+  }
+
+  return { index, docs, images, videos, audios, others, files, deleteF, createFolder }
 }
