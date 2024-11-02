@@ -10,6 +10,7 @@ import {
   videosReq,
   deleteFReq,
   createFolderReq,
+  deleteFolderReq,
 } from "@/api/page"
 
 export const usePageData = () => {
@@ -45,6 +46,10 @@ export const usePageData = () => {
   async function deleteF(filePath: string, fileName: string, fileID: number) {
     return await deleteFReq(filePath, fileName, fileID)
   }
+  // 删除文件夹
+  async function deleteFolder(folderPath: string, folderName: string, folderID: number) {
+    return await deleteFolderReq(folderPath, folderName, folderID)
+  }
   // 创建文件夹
   async function createFolder(path: string, folderName: string) {
     return await createFolderReq(path, folderName)
@@ -60,5 +65,6 @@ export const usePageData = () => {
     files,
     deleteF,
     createFolder,
+    deleteFolder,
   }
 }

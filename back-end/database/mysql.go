@@ -188,6 +188,34 @@ func DeleteFile(storeID uint, fileID uint) error {
 	})
 }
 
+func DeleteFolders(storeID, folderID uint) error {
+	return db.Transaction(func(tx *gorm.DB) error {
+		// BFS递归删除
+		deletedSt := make([]model.Folder, 0)
+		var folder model.Folder
+		tx.Where("file_store_id = ? and ID = ?", storeID, folderID).First(&folder)
+		deletedSt = append(deletedSt, folder)
+		for len(deletedSt) != 0 {
+			f := deletedSt[0]
+			deletedSt = deletedSt[1:]
+			// 删掉f文件夹
+			tx.Where("file_store_id = ?", storeID).Delete(&f)
+			// 找出parent_folder_id = f.ID的文件
+			var files []model.File
+			tx.Where("file_store_id = ? and parent_folder_id = ?", storeID, f.ID).Find(&files)
+			for _, file := range files {
+				// 调用删除文件的函数，同时删除文件和更新仓库大小
+				DeleteFile(storeID, file.ID)
+			}
+			// 找出parent_folder_id = f.ID的文件夹
+			var folders []model.Folder
+			tx.Where("file_store_id = ? and parent_folder_id = ?", storeID, f.ID).Find(&folders)
+			deletedSt = append(deletedSt, folders...)
+		}
+		return nil
+	})
+}
+
 // 创建文件夹
 func CreateFolder(storeID uint, path, folderName string) error {
 	return db.Transaction(func(tx *gorm.DB) error {

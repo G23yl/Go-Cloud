@@ -40,6 +40,7 @@ func SetUpRouter() *gin.Engine {
 		cloud.POST("/files", services.Upload)
 		cloud.GET("/files", services.GetInPathFiles)
 		cloud.DELETE("/files", services.DeleteFile)
+		cloud.DELETE("/folders", services.DeleteFolders)
 		cloud.POST("/folders", services.CreateFolder)
 	}
 	return router

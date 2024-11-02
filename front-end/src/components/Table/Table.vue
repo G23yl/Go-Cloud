@@ -13,7 +13,7 @@ interface Props {
 }
 const { data, size = "lg", isdorf = "D" } = defineProps<Props>()
 const emit = defineEmits<{
-  deleteFile: [filePath: string, fileName: string, fileID: number]
+  deleteFile: [filePath: string, fileName: string, fileID: number, type: string]
 }>()
 // 实时更新表格高度
 let tableHeight = ref(document.body.clientHeight - 135)
@@ -171,7 +171,13 @@ const download = (filePath: string, fileName: string, fileID: number) => {}
                 :icon="Delete"
                 size="small"
                 @click="
-                  emit('deleteFile', scope.row.filePath, scope.row.fileName, scope.row.fileID)
+                  emit(
+                    'deleteFile',
+                    scope.row.filePath,
+                    scope.row.fileName,
+                    scope.row.fileID,
+                    scope.row.type
+                  )
                 "
               ></el-button>
               <el-button

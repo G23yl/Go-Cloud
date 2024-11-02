@@ -93,6 +93,22 @@ export const deleteFReq = async (filePath: string, fileName: string, fileID: num
   }
 }
 
+// 删除文件夹
+export const deleteFolderReq = async (folderPath: string, folderName: string, folderID: number) => {
+  try {
+    const res = await request.delete<any, BasicResponse>("cloud/folders", {
+      params: {
+        folderID: folderID,
+        folderPath: folderPath,
+        folderName: folderName,
+      },
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // 创建文件夹
 export const createFolderReq = async (path: string, folderName: string) => {
   try {

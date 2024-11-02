@@ -314,6 +314,41 @@ func DeleteFile(ctx *gin.Context) {
 	response.Success(ctx, "删除成功", nil)
 }
 
+// 删除文件夹
+func DeleteFolders(ctx *gin.Context) {
+	// 获取用户id
+	userID, ok := ctx.Get("userID")
+	if !ok {
+		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
+	}
+	// 获取仓库ID
+	storeID, _, _ := database.GetStoreInfo(userID.(uint))
+	// 获取删除文件夹id
+	folderID := ctx.Query("folderID")
+	IFolderID, _ := strconv.Atoi(folderID)
+	folderPath := ctx.Query("folderPath")
+	folderName := ctx.Query("folderName")
+	dir, _ := os.Getwd()
+	localFolderPath := fmt.Sprintf("%s/static/local_store/user_%d%s", dir, userID.(uint), folderPath)
+	if folderPath != "/" {
+		localFolderPath += "/"
+	}
+	// 删除文件夹
+	err := os.RemoveAll(localFolderPath + folderName)
+	if err != nil {
+		response.ServerError(ctx, response.ErrorFolderDelete)
+		return
+	}
+	// 删除数据库信息
+	err = database.DeleteFolders(storeID, uint(IFolderID))
+	if err != nil {
+		response.ServerError(ctx, response.ErrorFolderDelete)
+		return
+	}
+	response.Success(ctx, "删除文件夹成功", nil)
+}
+
 // 创建文件夹
 func CreateFolder(ctx *gin.Context) {
 	// 获取用户id

@@ -23,7 +23,7 @@ const { query = "/" } = defineProps<{
 // 发请求获取当前页面的文件
 let data = ref<FFData[]>()
 const uploadFileList = ref<UploadFile[]>([])
-const { deleteF, createFolder } = usePageData()
+const { deleteF, createFolder, deleteFolder } = usePageData()
 const router = useRouter()
 
 const getData = async () => {
@@ -152,7 +152,7 @@ const handleUpload = () => {
     }
   })
 }
-const deleteFile = (filePath: string, fileName: string, fileID: number) => {
+const deleteFile = (filePath: string, fileName: string, fileID: number, type: string) => {
   // 弹窗警告
   ElMessageBox({
     message: h("p", null, [
@@ -167,12 +167,24 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
         // 如果确定删除，就开始加载
         instance.confirmButtonLoading = true
         instance.confirmButtonText = "删除中..."
-        const res = await deleteF(filePath, fileName, fileID)
-        if (res) {
-          ElNotification({
-            type: "success",
-            message: "删除成功",
-          })
+        if (type === "dir") {
+          // 删除文件夹
+          const res = await deleteFolder(filePath, fileName, fileID)
+          if (res) {
+            ElNotification({
+              type: "success",
+              message: "删除成功",
+            })
+          }
+        } else {
+          // 删除文件
+          const res = await deleteF(filePath, fileName, fileID)
+          if (res) {
+            ElNotification({
+              type: "success",
+              message: "删除成功",
+            })
+          }
         }
         // 不管删除失败还是成功都要关闭弹窗
         instance.confirmButtonLoading = false
