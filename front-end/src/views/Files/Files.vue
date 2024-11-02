@@ -200,8 +200,8 @@ const deleteFile = (filePath: string, fileName: string, fileID: number, type: st
     .catch(() => {})
 }
 // 触发下载
-const download = async (filePath: string, fileName: string, fileID: number) => {
-  const res = await downloadFile(filePath, fileName, fileID)
+const download = async (filePath: string, fileName: string) => {
+  const res = await downloadFile(filePath, fileName)
   if (res) {
     const blob = new Blob([res])
     const url = URL.createObjectURL(blob)

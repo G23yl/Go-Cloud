@@ -53,12 +53,12 @@ func Docs(ctx *gin.Context) {
 	docs := make([]response.CategoryRes, len(primitiveDocs))
 	for idx, doc := range primitiveDocs {
 		docs[idx] = response.CategoryRes{
-			FileID:      doc.ID,
-			FileName:    doc.FileName,
-			FileSize:    doc.FileSize,
-			UpdateTime:  doc.UpdatedAt,
-			DownloadNum: doc.DownloadCount,
-			FilePath:    doc.FilePath,
+			FileID:     doc.ID,
+			FileName:   doc.FileName,
+			FileSize:   doc.FileSize,
+			UpdateTime: doc.UpdatedAt,
+			// DownloadNum: doc.DownloadCount,
+			FilePath: doc.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", docs)
@@ -79,12 +79,12 @@ func Images(ctx *gin.Context) {
 	images := make([]response.CategoryRes, len(primitiveImages))
 	for idx, image := range primitiveImages {
 		images[idx] = response.CategoryRes{
-			FileID:      image.ID,
-			FileName:    image.FileName,
-			FileSize:    image.FileSize,
-			UpdateTime:  image.UpdatedAt,
-			DownloadNum: image.DownloadCount,
-			FilePath:    image.FilePath,
+			FileID:     image.ID,
+			FileName:   image.FileName,
+			FileSize:   image.FileSize,
+			UpdateTime: image.UpdatedAt,
+			// DownloadNum: image.DownloadCount,
+			FilePath: image.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", images)
@@ -105,12 +105,12 @@ func Videos(ctx *gin.Context) {
 	videos := make([]response.CategoryRes, len(primitiveVideos))
 	for idx, video := range primitiveVideos {
 		videos[idx] = response.CategoryRes{
-			FileID:      video.ID,
-			FileName:    video.FileName,
-			FileSize:    video.FileSize,
-			UpdateTime:  video.UpdatedAt,
-			DownloadNum: video.DownloadCount,
-			FilePath:    video.FilePath,
+			FileID:     video.ID,
+			FileName:   video.FileName,
+			FileSize:   video.FileSize,
+			UpdateTime: video.UpdatedAt,
+			// DownloadNum: video.DownloadCount,
+			FilePath: video.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", videos)
@@ -131,12 +131,12 @@ func Audios(ctx *gin.Context) {
 	audios := make([]response.CategoryRes, len(primitiveAudios))
 	for idx, audio := range primitiveAudios {
 		audios[idx] = response.CategoryRes{
-			FileID:      audio.ID,
-			FileName:    audio.FileName,
-			FileSize:    audio.FileSize,
-			UpdateTime:  audio.UpdatedAt,
-			DownloadNum: audio.DownloadCount,
-			FilePath:    audio.FilePath,
+			FileID:     audio.ID,
+			FileName:   audio.FileName,
+			FileSize:   audio.FileSize,
+			UpdateTime: audio.UpdatedAt,
+			// DownloadNum: audio.DownloadCount,
+			FilePath: audio.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", audios)
@@ -157,12 +157,12 @@ func Others(ctx *gin.Context) {
 	others := make([]response.CategoryRes, len(primitiveOthers))
 	for idx, other := range primitiveOthers {
 		others[idx] = response.CategoryRes{
-			FileID:      other.ID,
-			FileName:    other.FileName,
-			FileSize:    other.FileSize,
-			UpdateTime:  other.UpdatedAt,
-			DownloadNum: other.DownloadCount,
-			FilePath:    other.FilePath,
+			FileID:     other.ID,
+			FileName:   other.FileName,
+			FileSize:   other.FileSize,
+			UpdateTime: other.UpdatedAt,
+			// DownloadNum: other.DownloadCount,
+			FilePath: other.FilePath,
 		}
 	}
 	response.Success(ctx, "获取成功", others)
@@ -259,13 +259,13 @@ func GetInPathFiles(ctx *gin.Context) {
 	}
 	for idx, f := range files {
 		res[idx+len(folders)] = response.FFRes{
-			FileID:         f.ID,
-			FileName:       f.FileName,
-			UpdateTime:     f.UpdatedAt,
-			Type:           "file",
-			FileType:       f.Type,
-			FileSize:       f.FileSize,
-			DownloadNum:    f.DownloadCount,
+			FileID:     f.ID,
+			FileName:   f.FileName,
+			UpdateTime: f.UpdatedAt,
+			Type:       "file",
+			FileType:   f.Type,
+			FileSize:   f.FileSize,
+			// DownloadNum:    f.DownloadCount,
 			FilePath:       f.FilePath,
 			ParentFolderID: f.ParentFolderID,
 		}
@@ -394,11 +394,11 @@ func DownloadFile(ctx *gin.Context) {
 		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
 		return
 	}
-	// 获取仓库ID
-	storeID, _, _ := database.GetStoreInfo(userID.(uint))
+	// // 获取仓库ID
+	// storeID, _, _ := database.GetStoreInfo(userID.(uint))
 	// 获取参数
-	fileID := ctx.Query("fileID")
-	IFileID, _ := strconv.Atoi(fileID)
+	// fileID := ctx.Query("fileID")
+	// IFileID, _ := strconv.Atoi(fileID)
 	filePath := ctx.Query("filePath")
 	fileName := ctx.Query("fileName")
 	dir, _ := os.Getwd()
@@ -407,7 +407,7 @@ func DownloadFile(ctx *gin.Context) {
 		localFilePath += "/"
 	}
 	localFilePath += fileName
-	database.DownloadCountUpdate(storeID, uint(IFileID))
+	// database.DownloadCountUpdate(storeID, uint(IFileID))
 	ctx.Header("Content-disposition", fmt.Sprintf("attachment;filename=%s", fileName))
 	ctx.File(localFilePath)
 }

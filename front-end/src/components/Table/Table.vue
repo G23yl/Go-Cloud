@@ -14,7 +14,7 @@ interface Props {
 const { data, size = "lg", isdorf = "D" } = defineProps<Props>()
 const emit = defineEmits<{
   deleteFile: [filePath: string, fileName: string, fileID: number, type: string]
-  download: [filePath: string, fileName: string, fileID: number]
+  download: [filePath: string, fileName: string]
 }>()
 // 实时更新表格高度
 let tableHeight = ref(document.body.clientHeight - 135)
@@ -63,12 +63,12 @@ const sortBySize = (a: any, b: any) => {
   }
   return a.fileSize > b.fileSize ? 1 : -1
 }
-const sortByCount = (a: any, b: any) => {
-  if (a.downloadNum === b.downloadNum) {
-    return 0
-  }
-  return a.downloadNum > b.downloadNum ? 1 : -1
-}
+// const sortByCount = (a: any, b: any) => {
+//   if (a.downloadNum === b.downloadNum) {
+//     return 0
+//   }
+//   return a.downloadNum > b.downloadNum ? 1 : -1
+// }
 const sortByDate = (a: any, b: any) => {
   const dateA = new Date(a.updateTime)
   const dateB = new Date(b.updateTime)
@@ -117,7 +117,7 @@ const selectChange = (selection: DIVAOData[]) => {
         show-overflow-tooltip
         sortable
         :sort-method="sortByName"
-        width="180px"
+        width="250px"
       >
         <template #default="scope">
           <div style="display: flex; align-items: center">
@@ -137,13 +137,13 @@ const selectChange = (selection: DIVAOData[]) => {
           }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="下载次数" width="150px" sortable :sort-method="sortByCount">
+      <!-- <el-table-column label="下载次数" width="150px" sortable :sort-method="sortByCount">
         <template #default="scope">
           <el-tag type="info" effect="light" v-if="scope.row.fileSizeStr">{{
             scope.row.downloadNum
           }}</el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="修改日期" sortable :sort-method="sortByDate">
         <template #default="scope">
           <el-tag type="info" round effect="dark">{{
@@ -184,7 +184,7 @@ const selectChange = (selection: DIVAOData[]) => {
                 type="primary"
                 :icon="Download"
                 size="small"
-                @click="emit('download', scope.row.filePath, scope.row.fileName, scope.row.fileID)"
+                @click="emit('download', scope.row.filePath, scope.row.fileName)"
               ></el-button>
             </el-button-group>
           </div>

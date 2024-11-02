@@ -56,8 +56,8 @@ export const usePageData = () => {
     return await createFolderReq(path, folderName)
   }
   // 下载文件
-  async function downloadFile(filePath: string, fileName: string, fileID: number) {
-    return await downloadFileReq(filePath, fileName, fileID)
+  async function downloadFile(filePath: string, fileName: string) {
+    return await downloadFileReq(filePath, fileName)
   }
 
   return {

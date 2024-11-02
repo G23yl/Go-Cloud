@@ -71,7 +71,7 @@ export interface DIVAOData {
   fileSize: number
   fileSizeStr: string
   updateTime: string
-  downloadNum: number
+  // downloadNum: number
   filePath: string
   icon: IconInfo
 }
@@ -97,7 +97,7 @@ export interface FFData {
   fileSize: number
   fileSizeStr: string
   updateTime: string
-  downloadNum: number
+  // downloadNum: number
   filePath: string
   type: string // 如果是dir，那么忽略fileSize和downloadCount
   fileType: number

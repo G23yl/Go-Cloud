@@ -128,11 +128,10 @@ export const createFolderReq = async (path: string, folderName: string) => {
 }
 
 // 下载文件
-export const downloadFileReq = async (filePath: string, fileName: string, fileID: number) => {
+export const downloadFileReq = async (filePath: string, fileName: string) => {
   try {
     const res = await request.get<any, any>("/cloud/download", {
       params: {
-        fileID: fileID,
         filePath: filePath,
         fileName: fileName,
       },

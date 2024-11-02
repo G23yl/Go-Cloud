@@ -9,7 +9,7 @@ import { ElMessageBox, ElNotification } from "element-plus"
 
 let data = ref<DIVAOData[]>()
 const title = ref("我的视频")
-const { deleteF } = usePageData()
+const { deleteF, downloadFile } = usePageData()
 
 const getData = async () => {
   const { videos } = usePageData()
@@ -102,6 +102,19 @@ const patchDeleteFiles = (files: DIVAOData[]) => {
     })
     .catch(() => {})
 }
+// 触发下载
+const download = async (filePath: string, fileName: string) => {
+  const res = await downloadFile(filePath, fileName)
+  if (res) {
+    const blob = new Blob([res])
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = fileName
+    link.click()
+    nextTick(getData)
+  }
+}
 </script>
 
 <template>
@@ -111,7 +124,7 @@ const patchDeleteFiles = (files: DIVAOData[]) => {
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
-      <Table :data="data ? data : []" @delete-file="deleteFile" />
+      <Table :data="data ? data : []" @delete-file="deleteFile" @download="download" />
     </el-main>
   </el-container>
 </template>
