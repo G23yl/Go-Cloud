@@ -52,6 +52,7 @@ var ErrorFileExist Error = Error{"同名文件已存在"}
 var ErrorStoreFull Error = Error{"网盘已满，无法上传"}
 var ErrorDeleteFile Error = Error{"删除文件失败"}
 var ErrorFolderCreate Error = Error{"文件夹创建失败"}
+var ErrorPathInvalid Error = Error{"路径不合法"}
 
 func newResponse(code int, msg string, data any) gin.H {
 	return gin.H{

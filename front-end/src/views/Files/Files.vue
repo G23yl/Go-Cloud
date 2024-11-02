@@ -7,6 +7,7 @@ import { h, nextTick, onBeforeMount, ref, useTemplateRef } from "vue"
 import Table from "@/components/Table/Table.vue"
 import { ElMessageBox, ElNotification } from "element-plus"
 import request from "@/utils/axios"
+import { useRouter } from "vue-router"
 
 const title = ref("我的文件")
 // 上传页面ref
@@ -23,6 +24,7 @@ const { query = "/" } = defineProps<{
 let data = ref<FFData[]>()
 const uploadFileList = ref<UploadFile[]>([])
 const { deleteF, createFolder } = usePageData()
+const router = useRouter()
 
 const getData = async () => {
   const { files } = usePageData()
@@ -36,6 +38,9 @@ const getData = async () => {
         }
         item.icon = getFileTypeIcon(item.fileType)
       })
+    } else {
+      // 如果res为undefined说明没有这个文件夹，就跳转到404页面。因为如果有这个文件夹，但是没有数据，也会返回[]
+      router.push("/404")
     }
   } catch (error) {}
 }

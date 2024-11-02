@@ -226,8 +226,22 @@ func Upload(ctx *gin.Context) {
 
 // 获取对应路由下的文件和文件夹
 func GetInPathFiles(ctx *gin.Context) {
+	// 获取用户id
+	userID, ok := ctx.Get("userID")
+	if !ok {
+		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
+	}
 	// 采用query参数，类似于?path=xxx
 	path := ctx.Query("path")
+	// 判断路径是否合理
+	dir, _ := os.Getwd()
+	localFolderPath := fmt.Sprintf("%s/static/local_store/user_%d%s", dir, userID.(uint), path)
+	if _, err := os.Stat(localFolderPath); err != nil {
+		fmt.Println(err)
+		response.RequestError(ctx, response.ErrorPathInvalid)
+		return
+	}
 	//查询所有对应path的文件和文件夹
 	files, folders := database.GetInPathFiles(path)
 	// 把查询到的结果整理一下返回
