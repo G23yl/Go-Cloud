@@ -101,6 +101,7 @@ export interface FFData {
   filePath: string
   type: string // 如果是dir，那么忽略fileSize和downloadCount
   fileType: number
+  parentFolderID: number
   icon: IconInfo
 }
 export interface FFResponse extends BasicResponse {

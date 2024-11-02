@@ -16,3 +16,15 @@ func TestFileType(t *testing.T) {
 		}
 	}
 }
+
+func TestGetParentFolderNameAndPath(t *testing.T) {
+	tests := map[string][2]string{
+		"/go":      {"go", "/"},
+		"/go/test": {"test", "/go"},
+	}
+	for k, v := range tests {
+		if name, path := GetParentFolderNameAndPath(k); name != v[0] || path != v[1] {
+			t.Fatal(k, "的父文件夹名称和路径判断错误，应该是", v, "，实际是", name, path)
+		}
+	}
+}

@@ -45,3 +45,14 @@ func GetFileType(suffix string) int {
 		return 5
 	}
 }
+
+func GetParentFolderNameAndPath(filePath string) (string, string) {
+	paths := strings.Split(filePath, "/")
+	parentFolderName := paths[len(paths)-1]
+	paths = paths[:len(paths)-1]
+	if len(paths) == 1 {
+		return parentFolderName, "/"
+	}
+	parentFolderPath := strings.Join(paths, "/")
+	return parentFolderName, parentFolderPath
+}

@@ -156,7 +156,7 @@ const download = (filePath: string, fileName: string, fileID: number) => {}
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <div v-show="scope.row.fileSizeStr && scope.row.fileID === hoverLine">
+          <div v-show="scope.row.fileID === hoverLine">
             <el-button-group>
               <el-button
                 type="danger"
@@ -167,6 +167,7 @@ const download = (filePath: string, fileName: string, fileID: number) => {}
                 "
               ></el-button>
               <el-button
+                v-if="scope.row.fileSizeStr"
                 type="primary"
                 :icon="Download"
                 size="small"

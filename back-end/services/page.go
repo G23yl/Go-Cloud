@@ -248,24 +248,26 @@ func GetInPathFiles(ctx *gin.Context) {
 	res := make([]response.FFRes, len(files)+len(folders))
 	for idx, f := range folders {
 		res[idx] = response.FFRes{
-			FileID:     f.ID,
-			FileName:   f.FolderName,
-			UpdateTime: f.UpdatedAt,
-			Type:       "dir",
-			FileType:   0,
-			FilePath:   f.FilePath,
+			FileID:         f.ID,
+			FileName:       f.FolderName,
+			UpdateTime:     f.UpdatedAt,
+			Type:           "dir",
+			FileType:       0,
+			FilePath:       f.FilePath,
+			ParentFolderID: f.ParentFolderID,
 		}
 	}
 	for idx, f := range files {
 		res[idx+len(folders)] = response.FFRes{
-			FileID:      f.ID,
-			FileName:    f.FileName,
-			UpdateTime:  f.UpdatedAt,
-			Type:        "file",
-			FileType:    f.Type,
-			FileSize:    f.FileSize,
-			DownloadNum: f.DownloadCount,
-			FilePath:    f.FilePath,
+			FileID:         f.ID,
+			FileName:       f.FileName,
+			UpdateTime:     f.UpdatedAt,
+			Type:           "file",
+			FileType:       f.Type,
+			FileSize:       f.FileSize,
+			DownloadNum:    f.DownloadCount,
+			FilePath:       f.FilePath,
+			ParentFolderID: f.ParentFolderID,
 		}
 	}
 	response.Success(ctx, "获取成功", res)

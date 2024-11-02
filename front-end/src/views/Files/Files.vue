@@ -5,7 +5,7 @@ import { type FFData, type UploadFile } from "@/types/types"
 import { getFileSizeStr, getFileTypeIcon } from "@/utils/util/util"
 import { h, nextTick, onBeforeMount, ref, useTemplateRef } from "vue"
 import Table from "@/components/Table/Table.vue"
-import { ElMessageBox, ElNotification } from "element-plus"
+import { ElMessage, ElMessageBox, ElNotification } from "element-plus"
 import request from "@/utils/axios"
 import { useRouter } from "vue-router"
 
@@ -61,6 +61,19 @@ const toggleCreate = () => {
     cancelButtonText: "取消",
   })
     .then(async ({ value }) => {
+      // 判断是否存在相同名称文件夹
+      if (data.value) {
+        for (let i = 0; i < data.value.length; i++) {
+          if (data.value[i].type === "dir" && data.value[i].fileName === value) {
+            ElNotification({
+              type: "warning",
+              message: "文件夹名称已存在",
+            })
+            return
+          }
+        }
+      }
+      // 没有data的话，必定不存在相同名称文件夹，所以直接上传
       const res = await createFolder(query, value)
       if (res) {
         ElNotification({
@@ -100,7 +113,10 @@ const handleChange = () => {
   }
 }
 const handleDirChange = (e: Event) => {
-  console.log(e)
+  ElNotification({
+    type: "info",
+    message: "快来了~~",
+  })
 }
 const handleRemove = (filename: string) => {
   uploadFileList.value = uploadFileList.value.filter((item) => item.file.name !== filename)

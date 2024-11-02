@@ -125,14 +125,23 @@ func UpdateAvatar(user *model.User) error {
 func CreateFile(storeID uint, filePath, fileName string, size int64) error {
 	// 采用事务，防止出现文件保存了，但是仓库大小没更新的情况
 	return db.Transaction(func(tx *gorm.DB) error {
+		// 获取父文件夹ID
+		var parentFolderID uint = 0
+		if filePath != "/" {
+			parentFolderName, parentFolderPath := util_file.GetParentFolderNameAndPath(filePath)
+			var folder model.Folder
+			tx.Where("file_store_id = ? and file_path = ? and folder_name = ?", storeID, parentFolderPath, parentFolderName).First(&folder)
+			parentFolderID = folder.ID
+		}
 		arr := strings.Split(fileName, ".")
 		suffix := "." + arr[1]
 		err := tx.Create(&model.File{
-			FileStoreID: storeID,
-			FileName:    fileName,
-			FilePath:    filePath,
-			FileSize:    size,
-			Type:        util_file.GetFileType(suffix),
+			FileStoreID:    storeID,
+			FileName:       fileName,
+			FilePath:       filePath,
+			FileSize:       size,
+			Type:           util_file.GetFileType(suffix),
+			ParentFolderID: parentFolderID,
 		}).Error
 		if err != nil {
 			return err
@@ -181,9 +190,19 @@ func DeleteFile(storeID uint, fileID uint) error {
 
 // 创建文件夹
 func CreateFolder(storeID uint, path, folderName string) error {
-	return db.Create(&model.Folder{
-		FileStoreID: storeID,
-		FilePath:    path,
-		FolderName:  folderName,
-	}).Error
+	return db.Transaction(func(tx *gorm.DB) error {
+		var parentFolderID uint = 0
+		if path != "/" {
+			parentFolderName, parentFolderPath := util_file.GetParentFolderNameAndPath(path)
+			var folder model.Folder
+			tx.Where("file_store_id = ? and file_path = ? and folder_name = ?", storeID, parentFolderPath, parentFolderName).First(&folder)
+			parentFolderID = folder.ID
+		}
+		return tx.Create(&model.Folder{
+			FileStoreID:    storeID,
+			FilePath:       path,
+			FolderName:     folderName,
+			ParentFolderID: parentFolderID,
+		}).Error
+	})
 }

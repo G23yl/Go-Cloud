@@ -24,14 +24,15 @@ type CategoryRes struct {
 
 // 总的文件和文件夹返回类型
 type FFRes struct {
-	FileID      uint      `json:"fileID"`
-	FileName    string    `json:"fileName"`
-	FileSize    int64     `json:"fileSize"`
-	UpdateTime  time.Time `json:"updateTime"`
-	Type        string    `json:"type"`        // 是文件还是文件夹
-	FileType    int       `json:"fileType"`    // 哪种文件 0:文件夹 1:图片 2:视频 3:音频 4:文档 5:其他
-	DownloadNum int64     `json:"downloadNum"` // 如果是文件夹就忽略此字段
-	FilePath    string    `json:"filePath"`
+	FileID         uint      `json:"fileID"`
+	FileName       string    `json:"fileName"`
+	FileSize       int64     `json:"fileSize"` // 如果是文件夹就忽略此字段
+	UpdateTime     time.Time `json:"updateTime"`
+	Type           string    `json:"type"`        // 是文件还是文件夹
+	FileType       int       `json:"fileType"`    // 哪种文件 0:文件夹 1:图片 2:视频 3:音频 4:文档 5:其他
+	DownloadNum    int64     `json:"downloadNum"` // 如果是文件夹就忽略此字段
+	FilePath       string    `json:"filePath"`
+	ParentFolderID uint      `json:"parentFolderID"` // 父文件夹ID
 }
 
 var ErrorParams Error = Error{"参数绑定错误"}

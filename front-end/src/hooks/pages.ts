@@ -45,10 +45,20 @@ export const usePageData = () => {
   async function deleteF(filePath: string, fileName: string, fileID: number) {
     return await deleteFReq(filePath, fileName, fileID)
   }
-
+  // 创建文件夹
   async function createFolder(path: string, folderName: string) {
     return await createFolderReq(path, folderName)
   }
 
-  return { index, docs, images, videos, audios, others, files, deleteF, createFolder }
+  return {
+    index,
+    docs,
+    images,
+    videos,
+    audios,
+    others,
+    files,
+    deleteF,
+    createFolder,
+  }
 }
