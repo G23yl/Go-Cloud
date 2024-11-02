@@ -19,6 +19,7 @@ const emit = defineEmits<{
 let tableHeight = ref(document.body.clientHeight - 135)
 // 获取鼠标hover在哪一行
 const hoverLine = ref<number>()
+const hoverType = ref<string>()
 const route = useRoute()
 const router = useRouter()
 const tableLoading = ref(true)
@@ -42,9 +43,11 @@ window.addEventListener("resize", () => {
 })
 const hover = (row: any) => {
   hoverLine.value = row.fileID
+  hoverType.value = row.type
 }
 const unhover = () => {
   hoverLine.value = undefined
+  hoverType.value = undefined
 }
 // 排序函数
 const sortByName = (a: any, b: any) => {
@@ -156,7 +159,12 @@ const download = (filePath: string, fileName: string, fileID: number) => {}
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <div v-show="scope.row.fileID === hoverLine">
+          <div
+            v-show="
+              (isdorf === 'D' && scope.row.fileID === hoverLine) ||
+              (isdorf === 'F' && scope.row.fileID === hoverLine && scope.row.type === hoverType)
+            "
+          >
             <el-button-group>
               <el-button
                 type="danger"
