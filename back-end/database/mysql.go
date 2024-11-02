@@ -171,6 +171,10 @@ func DeleteFile(storeID uint, fileID uint) error {
 		var store model.FileStore
 		tx.Where("ID = ?", storeID).First(&store)
 		store.CurrentSize -= file.FileSize
+		//FIXME 这个地方应该有bug，但是不知道为什么，以后再修复吧
+		if store.CurrentSize < 0 {
+			store.CurrentSize = 0
+		}
 		return tx.Save(&store).Error
 	})
 }
