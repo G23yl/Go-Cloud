@@ -12,6 +12,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 var db *gorm.DB
@@ -148,7 +149,7 @@ func CreateFile(storeID uint, filePath, fileName string, size int64) error {
 		}
 		// 更新仓库的大小
 		var store model.FileStore
-		tx.Where("ID = ?", storeID).First(&store)
+		tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("ID = ?", storeID).First(&store)
 		store.CurrentSize += size
 		return tx.Save(&store).Error
 	})
@@ -178,12 +179,12 @@ func DeleteFile(storeID uint, fileID uint) error {
 		}
 		// 更新仓库的大小
 		var store model.FileStore
-		tx.Where("ID = ?", storeID).First(&store)
+		tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("ID = ?", storeID).First(&store)
 		store.CurrentSize -= file.FileSize
 		//FIXME 这个地方应该有bug，但是不知道为什么，以后再修复吧
-		if store.CurrentSize < 0 {
-			store.CurrentSize = 0
-		}
+		// if store.CurrentSize < 0 {
+		// 	store.CurrentSize = 0
+		// }
 		return tx.Save(&store).Error
 	})
 }
