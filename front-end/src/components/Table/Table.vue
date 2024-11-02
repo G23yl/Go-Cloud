@@ -14,6 +14,7 @@ interface Props {
 const { data, size = "lg", isdorf = "D" } = defineProps<Props>()
 const emit = defineEmits<{
   deleteFile: [filePath: string, fileName: string, fileID: number, type: string]
+  download: [filePath: string, fileName: string, fileID: number]
 }>()
 // 实时更新表格高度
 let tableHeight = ref(document.body.clientHeight - 135)
@@ -93,8 +94,6 @@ const doubleClickEnter = (row: any) => {
 const selectChange = (selection: DIVAOData[]) => {
   setFiles(selection)
 }
-// 触发下载
-const download = (filePath: string, fileName: string, fileID: number) => {}
 </script>
 
 <template>
@@ -185,7 +184,7 @@ const download = (filePath: string, fileName: string, fileID: number) => {}
                 type="primary"
                 :icon="Download"
                 size="small"
-                @click="download(scope.row.filePath, scope.row.fileName, scope.row.fileID)"
+                @click="emit('download', scope.row.filePath, scope.row.fileName, scope.row.fileID)"
               ></el-button>
             </el-button-group>
           </div>

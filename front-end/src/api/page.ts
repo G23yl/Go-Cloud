@@ -122,5 +122,24 @@ export const createFolderReq = async (path: string, folderName: string) => {
       }
     )
     return res
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// 下载文件
+export const downloadFileReq = async (filePath: string, fileName: string, fileID: number) => {
+  try {
+    const res = await request.get<any, any>("/cloud/download", {
+      params: {
+        fileID: fileID,
+        filePath: filePath,
+        fileName: fileName,
+      },
+      responseType: "blob",
+    })
+    return res
+  } catch (error) {
+    console.log(error)
+  }
 }

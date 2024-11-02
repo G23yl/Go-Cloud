@@ -37,6 +37,7 @@ func SetUpRouter() *gin.Engine {
 		cloud.GET("/videos", services.Videos)
 		cloud.GET("/audios", services.Audios)
 		cloud.GET("/others", services.Others)
+		cloud.GET("/download", services.DownloadFile)
 		cloud.POST("/files", services.Upload)
 		cloud.GET("/files", services.GetInPathFiles)
 		cloud.DELETE("/files", services.DeleteFile)

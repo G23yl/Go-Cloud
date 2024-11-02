@@ -385,3 +385,29 @@ func CreateFolder(ctx *gin.Context) {
 	}
 	response.Success(ctx, "文件夹创建成功", nil)
 }
+
+// 下载文件
+func DownloadFile(ctx *gin.Context) {
+	// 获取用户id
+	userID, ok := ctx.Get("userID")
+	if !ok {
+		response.UnauthorizedError(ctx, response.ErrorUnauthorized)
+		return
+	}
+	// 获取仓库ID
+	storeID, _, _ := database.GetStoreInfo(userID.(uint))
+	// 获取参数
+	fileID := ctx.Query("fileID")
+	IFileID, _ := strconv.Atoi(fileID)
+	filePath := ctx.Query("filePath")
+	fileName := ctx.Query("fileName")
+	dir, _ := os.Getwd()
+	localFilePath := fmt.Sprintf("%s/static/local_store/user_%d%s", dir, userID.(uint), filePath)
+	if filePath != "/" {
+		localFilePath += "/"
+	}
+	localFilePath += fileName
+	database.DownloadCountUpdate(storeID, uint(IFileID))
+	ctx.Header("Content-disposition", fmt.Sprintf("attachment;filename=%s", fileName))
+	ctx.File(localFilePath)
+}

@@ -234,3 +234,11 @@ func CreateFolder(storeID uint, path, folderName string) error {
 		}).Error
 	})
 }
+
+// 下载文件更新文件下载次数
+func DownloadCountUpdate(storeID, fileID uint) {
+	var file model.File
+	db.Where("file_store_id = ? and ID = ?", storeID, fileID).First(&file)
+	file.DownloadCount++
+	db.Save(&file)
+}

@@ -11,6 +11,7 @@ import {
   deleteFReq,
   createFolderReq,
   deleteFolderReq,
+  downloadFileReq,
 } from "@/api/page"
 
 export const usePageData = () => {
@@ -54,6 +55,10 @@ export const usePageData = () => {
   async function createFolder(path: string, folderName: string) {
     return await createFolderReq(path, folderName)
   }
+  // 下载文件
+  async function downloadFile(filePath: string, fileName: string, fileID: number) {
+    return await downloadFileReq(filePath, fileName, fileID)
+  }
 
   return {
     index,
@@ -66,5 +71,6 @@ export const usePageData = () => {
     deleteF,
     createFolder,
     deleteFolder,
+    downloadFile,
   }
 }

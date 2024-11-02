@@ -23,7 +23,7 @@ const { query = "/" } = defineProps<{
 // 发请求获取当前页面的文件
 let data = ref<FFData[]>()
 const uploadFileList = ref<UploadFile[]>([])
-const { deleteF, createFolder, deleteFolder } = usePageData()
+const { deleteF, createFolder, deleteFolder, downloadFile } = usePageData()
 const router = useRouter()
 
 const getData = async () => {
@@ -199,6 +199,19 @@ const deleteFile = (filePath: string, fileName: string, fileID: number, type: st
     })
     .catch(() => {})
 }
+// 触发下载
+const download = async (filePath: string, fileName: string, fileID: number) => {
+  const res = await downloadFile(filePath, fileName, fileID)
+  if (res) {
+    const blob = new Blob([res])
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = fileName
+    link.click()
+    nextTick(getData)
+  }
+}
 </script>
 
 <template>
@@ -208,7 +221,7 @@ const deleteFile = (filePath: string, fileName: string, fileID: number, type: st
     </el-header>
     <el-divider style="width: 99%"></el-divider>
     <el-main>
-      <Table :data="data" isdorf="F" @delete-file="deleteFile" />
+      <Table :data="data" isdorf="F" @delete-file="deleteFile" @download="download" />
       <div class="mul-btns">
         <div class="btn" @click="toggle">
           <font-awesome-icon :icon="['fas', 'plus']" style="color: #ffffff" size="lg" />
