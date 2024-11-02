@@ -244,6 +244,9 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
 .el-main {
   --el-main-padding: 0;
 }
+.el-header {
+  --el-header-padding: 0;
+}
 * {
   box-sizing: border-box;
 }

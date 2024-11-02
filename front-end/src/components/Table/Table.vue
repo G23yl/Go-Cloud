@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import useFileStore from "@/store/files"
 import type { DIVAOData, FFData } from "@/types/types"
 import { Delete, Download } from "@element-plus/icons-vue"
 import { onMounted, ref, watch } from "vue"
@@ -21,7 +22,9 @@ const hoverLine = ref<number>()
 const route = useRoute()
 const router = useRouter()
 const tableLoading = ref(true)
+const { setFiles } = useFileStore()
 
+// data还未获取的时候表格显示加载中
 watch(
   () => data,
   () => {
@@ -30,6 +33,7 @@ watch(
     }
   }
 )
+// 实时更新表格高度
 onMounted(() => {
   tableHeight.value = document.body.clientHeight - 135
 })
@@ -42,6 +46,7 @@ const hover = (row: any) => {
 const unhover = () => {
   hoverLine.value = undefined
 }
+// 排序函数
 const sortByName = (a: any, b: any) => {
   if (a.fileName === b.fileName) {
     return 0
@@ -68,6 +73,7 @@ const sortByDate = (a: any, b: any) => {
   }
   return dateA > dateB ? 1 : -1
 }
+// 双击文件夹
 const doubleClickEnter = (row: any) => {
   if (data) {
     if (row.type === "dir") {
@@ -80,6 +86,12 @@ const doubleClickEnter = (row: any) => {
     }
   }
 }
+// 选中文件
+const selectChange = (selection: DIVAOData[]) => {
+  setFiles(selection)
+}
+// 触发下载
+const download = (filePath: string, fileName: string, fileID: number) => {}
 </script>
 
 <template>
@@ -95,8 +107,16 @@ const doubleClickEnter = (row: any) => {
       @cell-mouse-enter="hover"
       @cell-mouse-leave="unhover"
       @row-dblclick="doubleClickEnter"
+      @selection-change="selectChange"
     >
-      <el-table-column label="名称" show-overflow-tooltip sortable :sort-method="sortByName">
+      <el-table-column v-if="isdorf === 'D'" type="selection" width="30" />
+      <el-table-column
+        label="名称"
+        show-overflow-tooltip
+        sortable
+        :sort-method="sortByName"
+        width="180px"
+      >
         <template #default="scope">
           <div style="display: flex; align-items: center">
             <font-awesome-icon
@@ -108,7 +128,7 @@ const doubleClickEnter = (row: any) => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="大小" width="180px" sortable :sort-method="sortBySize">
+      <el-table-column label="大小" sortable :sort-method="sortBySize">
         <template #default="scope">
           <el-tag type="primary" round effect="light" v-if="scope.row.fileSizeStr">{{
             scope.row.fileSizeStr
@@ -146,7 +166,12 @@ const doubleClickEnter = (row: any) => {
                   emit('deleteFile', scope.row.filePath, scope.row.fileName, scope.row.fileID)
                 "
               ></el-button>
-              <el-button type="primary" :icon="Download" size="small"></el-button>
+              <el-button
+                type="primary"
+                :icon="Download"
+                size="small"
+                @click="download(scope.row.filePath, scope.row.fileName, scope.row.fileID)"
+              ></el-button>
             </el-button-group>
           </div>
         </template>

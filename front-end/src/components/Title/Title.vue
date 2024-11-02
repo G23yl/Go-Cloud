@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import useFileStore from "@/store/files"
+import type { DIVAOData } from "@/types/types"
 import { ArrowRight } from "@element-plus/icons-vue"
 import { ref, watch } from "vue"
 import { useRouter } from "vue-router"
@@ -10,9 +12,20 @@ interface Props {
   path?: string
 }
 const { title, search = false, bread = false, path = "" } = defineProps<Props>()
+const emit = defineEmits<{
+  patchDeleteFiles: [files: DIVAOData[]]
+}>()
 const searchContent = ref("")
 const breadItems = ref<string[]>([])
 const router = useRouter()
+const { getFiles, setFiles } = useFileStore()
+const selectedFiles = getFiles()
+const showDeleteButton =
+  title === "我的文档" ||
+  title === "我的图像" ||
+  title === "我的视频" ||
+  title === "我的音频" ||
+  title === "其他文件"
 // 把path按照"/"分割成数组，作为bread-items
 if (path === "/") {
   breadItems.value = ["/"]
@@ -33,6 +46,8 @@ watch(
     location.reload()
   }
 )
+// 每次跳转到别的页面就清空选中的文件
+setFiles([])
 
 // 根据点击的idx获取path参数的新值
 const jump = (idx: number) => {
@@ -71,6 +86,13 @@ const jump = (idx: number) => {
         }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+    <el-button
+      v-if="showDeleteButton && selectedFiles.length != 0"
+      type="danger"
+      style="margin-left: auto"
+      @click="emit('patchDeleteFiles', selectedFiles)"
+      >批量删除</el-button
+    >
   </div>
 </template>
 
