@@ -117,7 +117,7 @@ const selectChange = (selection: DIVAOData[]) => {
         show-overflow-tooltip
         sortable
         :sort-method="sortByName"
-        width="250px"
+        width="200px"
       >
         <template #default="scope">
           <div style="display: flex; align-items: center">
@@ -151,8 +151,9 @@ const selectChange = (selection: DIVAOData[]) => {
           }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column v-if="isdorf === 'D'" label="路径">
+      <el-table-column v-if="isdorf === 'D'" label="路径" show-overflow-tooltip>
         <template #default="scope">
+          <!-- {{ scope.row.filePath }} -->
           <el-tag type="warning" round>{{ scope.row.filePath }}</el-tag>
         </template>
       </el-table-column>

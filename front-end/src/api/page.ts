@@ -102,6 +102,7 @@ export const deleteFolderReq = async (folderPath: string, folderName: string, fo
         folderPath: folderPath,
         folderName: folderName,
       },
+      timeout: 60000,
     })
     return res
   } catch (error) {
@@ -136,6 +137,7 @@ export const downloadFileReq = async (filePath: string, fileName: string) => {
         fileName: fileName,
       },
       responseType: "blob",
+      timeout: 360000,
     })
     return res
   } catch (error) {

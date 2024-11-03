@@ -95,40 +95,68 @@ const handleChange = () => {
   uploadFileList.value = []
   if (inputRef.value && inputRef.value.files && data.value) {
     const fileList = inputRef.value.files
-    for (let i = 0; i < fileList.length; i++) {
-      const uploadFile: UploadFile = {
-        file: fileList[i],
-        progress: 0,
-        successIconShow: false,
-        existSameFile: false,
-      }
-      for (let j = 0; j < data.value.length; j++) {
-        if (uploadFile.file.name === data.value[j].fileName) {
-          uploadFile.existSameFile = true
-          break
+    if (fileList.length > 0) {
+      for (let i = 0; i < fileList.length; i++) {
+        const uploadFile: UploadFile = {
+          file: fileList[i],
+          progress: 0,
+          successIconShow: false,
+          existSameFile: false,
         }
+        for (let j = 0; j < data.value.length; j++) {
+          if (uploadFile.file.name === data.value[j].fileName) {
+            uploadFile.existSameFile = true
+            break
+          }
+        }
+        uploadFileList.value.push(uploadFile)
       }
-      uploadFileList.value.push(uploadFile)
+      handleUpload("file")
     }
   }
 }
-const handleDirChange = (e: Event) => {
-  ElNotification({
-    type: "info",
-    message: "快来了~~",
-  })
+const handleDirChange = () => {
+  uploadFileList.value = []
+  if (dirInputRef.value && dirInputRef.value.files && data.value) {
+    const fileList = dirInputRef.value.files
+    if (fileList.length > 0) {
+      const folderName = fileList[0].webkitRelativePath.split("/")[0]
+      // 由于上传的是文件夹，因此我只需要判断当前目录下有没有同名文件夹即可
+      for (let j = 0; j < data.value.length; j++) {
+        if (data.value[j].type === "dir" && data.value[j].fileName === folderName) {
+          ElNotification({
+            type: "error",
+            message: "文件夹名称已存在",
+          })
+          return
+        }
+      }
+      for (let i = 0; i < fileList.length; i++) {
+        const uploadFile: UploadFile = {
+          file: fileList[i],
+          progress: 0,
+          successIconShow: false,
+          existSameFile: false,
+        }
+        uploadFileList.value.push(uploadFile)
+      }
+      handleUpload("dir")
+    }
+  }
 }
 const handleRemove = (filename: string) => {
   uploadFileList.value = uploadFileList.value.filter((item) => item.file.name !== filename)
 }
-const handleUpload = () => {
-  uploadFileList.value.forEach(async (item) => {
-    // 不存在同名文件才发请求
-    if (!item.existSameFile) {
-      let formData = new FormData()
-      formData.append("file", item.file)
-      formData.append("filepath", query)
-      try {
+const handleUpload = async (uploadType: string) => {
+  // 上传文件
+  if (uploadType === "file") {
+    let successFlg = true
+    uploadFileList.value.forEach(async (item) => {
+      // 不存在同名文件才发请求
+      if (!item.existSameFile) {
+        let formData = new FormData()
+        formData.append("file", item.file)
+        formData.append("filepath", query)
         const res = await request.post("/cloud/files", formData, {
           onUploadProgress: (p) => {
             if (p.total) {
@@ -139,18 +167,115 @@ const handleUpload = () => {
               item.successIconShow = true
             }
           },
+          timeout: 120000,
         })
-        if (res) {
+        if (!res) {
+          successFlg = false
           ElNotification({
-            type: "success",
-            message: "上传成功",
+            type: "error",
+            message: `上传文件失败: ${item.file.name}`,
           })
         }
-        // 上传成功后获取新数据
-        nextTick(getData)
-      } catch (error) {}
+      }
+    })
+    if (successFlg) {
+      ElNotification({
+        type: "success",
+        message: "上传成功",
+      })
     }
-  })
+    nextTick(getData)
+  } else {
+    let successFlg = true
+    // 上传文件夹
+    // 找出所有不重复的文件夹
+    const AllFoldersSet = new Set<string>()
+    const folderPathAndName = []
+    uploadFileList.value.forEach((item) => {
+      let pathItems = item.file.webkitRelativePath.split("/")
+      pathItems.splice(pathItems.length - 1, 1)
+      for (let i = 0; i < pathItems.length; i++) {
+        let p = pathItems.slice(0, i + 1)
+        AllFoldersSet.add(p.join("/"))
+      }
+    })
+    // 要先创建父文件夹，不然会报错
+    const allFoldersArr = Array.from(AllFoldersSet).sort((a: string, b: string) => {
+      return a.length - b.length
+    })
+    // 把所有需要创建的文件夹的名字和路径整理出来
+    for (let i = 0; i < allFoldersArr.length; i++) {
+      const items = allFoldersArr[i].split("/")
+      const folderName = items[items.length - 1]
+      let partialFolderPath = items.slice(0, items.length - 1).join("/")
+      let folderPath = query
+      if (partialFolderPath != "") {
+        if (query != "/") {
+          folderPath += "/"
+        }
+        folderPath += partialFolderPath
+      }
+      folderPathAndName.push({
+        folderName: folderName,
+        folderPath: folderPath,
+      })
+    }
+    // 开始创建文件夹
+    for (let i = 0; i < folderPathAndName.length; i++) {
+      const res = await createFolder(
+        folderPathAndName[i].folderPath,
+        folderPathAndName[i].folderName
+      )
+      if (!res) {
+        successFlg = false
+        ElNotification({
+          type: "error",
+          message: `创建文件夹失败: ${folderPathAndName[i].folderName}`,
+        })
+        nextTick(getData)
+        return
+      }
+    }
+    // 创建文件
+    uploadFileList.value.forEach(async (fileInfo) => {
+      const items = fileInfo.file.webkitRelativePath.split("/")
+      const partialFilePath = items.slice(0, items.length - 1).join("/")
+      let filePath = query
+      if (query !== "/") {
+        filePath += "/"
+      }
+      filePath += partialFilePath
+      let formData = new FormData()
+      formData.append("file", fileInfo.file)
+      formData.append("filepath", filePath)
+      const res = await request.post("/cloud/files", formData, {
+        onUploadProgress: (p) => {
+          if (p.total) {
+            // 进度条显示出来
+            fileInfo.progress = Math.round((p.loaded / p.total) * 100)
+          }
+          if (p.loaded === p.total) {
+            fileInfo.successIconShow = true
+          }
+        },
+        timeout: 120000,
+      })
+      if (!res) {
+        successFlg = false
+        ElNotification({
+          type: "error",
+          message: `上传文件失败: ${fileInfo.file.name}`,
+        })
+      }
+    })
+    if (successFlg) {
+      ElNotification({
+        type: "success",
+        message: "上传成功",
+      })
+    }
+    nextTick(getData)
+  }
 }
 const deleteFile = (filePath: string, fileName: string, fileID: number, type: string) => {
   // 弹窗警告
@@ -226,17 +351,18 @@ const download = async (filePath: string, fileName: string) => {
         <div class="btn" @click="toggle">
           <font-awesome-icon :icon="['fas', 'plus']" style="color: #ffffff" size="lg" />
         </div>
-        <div class="folder" @click="toggleCreate">
-          <font-awesome-icon :icon="['fas', 'folder-plus']" style="color: #ffffff" size="lg" />
-        </div>
+        <el-tooltip content="创建文件夹" placement="left">
+          <div class="folder" @click="toggleCreate">
+            <font-awesome-icon :icon="['fas', 'folder-plus']" style="color: #ffffff" size="lg" />
+          </div>
+        </el-tooltip>
       </div>
     </el-main>
     <div ref="pannelRef" class="pannel">
       <el-scrollbar>
         <div class="pannel-content">
-          <el-button type="primary" @click="handleSelect">选择文件</el-button>
-          <el-button type="warning" @click="handleDirSelect">选择文件夹</el-button>
-          <el-button type="success" @click="handleUpload">上传</el-button>
+          <el-button type="primary" @click="handleSelect">上传文件</el-button>
+          <el-button type="warning" @click="handleDirSelect">上传文件夹</el-button>
           <input ref="inputRef" type="file" style="display: none" multiple @change="handleChange" />
           <input
             ref="dirInputRef"
@@ -329,7 +455,7 @@ const download = async (filePath: string, fileName: string) => {
   align-items: center;
   cursor: pointer;
   margin-bottom: 15px;
-  transition: all 0.3s ease;
+  transition: all 0.8s ease-out;
   &:hover {
     transform: scale(1.02);
     box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14),
