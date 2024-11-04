@@ -33,6 +33,7 @@ import {
   faPenToSquare,
   faPlus,
   faRightToBracket,
+  faArrowRightToBracket,
   faShareNodes,
   faTrashCan,
   faUser,
@@ -70,7 +71,8 @@ library.add(
   faCircleCheck,
   faXmark,
   faCircleQuestion,
-  faFolderPlus
+  faFolderPlus,
+  faArrowRightToBracket
 )
 
 const app = createApp(App)

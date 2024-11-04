@@ -87,6 +87,7 @@ h2 {
   display: flex;
   height: calc(100vh - 135px);
   gap: 20px;
+  font-family: "PingFang SC";
   .left {
     width: 50%;
     background-color: $aside-bg-color;

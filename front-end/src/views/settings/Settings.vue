@@ -98,6 +98,7 @@ const leave = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "PingFang SC";
   .card {
     width: 300px;
     height: calc(100vh - 135px);

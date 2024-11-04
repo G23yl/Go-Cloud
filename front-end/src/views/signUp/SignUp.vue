@@ -175,7 +175,7 @@ const handleSignUp = async () => {
       </div>
       <el-scrollbar height="500px">
         <div class="signup-panel">
-          <h2>Sign Up</h2>
+          <h2>注册</h2>
           <el-form
             ref="signUpFormRef"
             :model="signUpInfo"
@@ -186,10 +186,10 @@ const handleSignUp = async () => {
             style="max-width: 420px; width: 100%"
             size="large"
           >
-            <el-form-item label="Username" prop="username">
+            <el-form-item label="用户名" prop="username">
               <el-input v-model="signUpInfo.username" placeholder="请输入用户名" />
             </el-form-item>
-            <el-form-item ref="emailRef" label="Email" prop="email">
+            <el-form-item ref="emailRef" label="邮箱" prop="email">
               <el-input v-model="signUpInfo.email" placeholder="请输入邮箱" />
             </el-form-item>
             <div class="verification-section">
@@ -203,10 +203,10 @@ const handleSignUp = async () => {
                 :disabled="sendCodeBtn"
                 :loading="sendCodeLoading"
               >
-                {{ timer ? `${countDown}s` : "Send" }}
+                {{ timer ? `${countDown}s` : "发送" }}
               </el-button>
             </div>
-            <el-form-item label="Password" prop="password">
+            <el-form-item label="密码" prop="password">
               <el-input
                 type="password"
                 show-password
@@ -229,11 +229,11 @@ const handleSignUp = async () => {
               @click="handleSignUp"
               :loading="signUpLoading"
             >
-              Sign Up
+              注册
             </el-button>
           </el-form>
           <div class="footer">
-            <p>Already have an account? <router-link to="/">Login</router-link></p>
+            <p>已经在我们的大家庭中了? <router-link to="/">登录</router-link></p>
           </div>
         </div>
       </el-scrollbar>
@@ -252,6 +252,7 @@ const handleSignUp = async () => {
   justify-content: center;
   align-items: center;
   height: 500px;
+  font-family: "PingFang SC";
 }
 
 .card {

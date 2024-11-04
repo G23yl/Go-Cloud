@@ -131,6 +131,7 @@ const GotoHub = () => {
   flex-direction: column;
   overflow: hidden;
   color: #fff;
+  font-family: "PingFang SC";
 }
 .logo {
   display: flex;

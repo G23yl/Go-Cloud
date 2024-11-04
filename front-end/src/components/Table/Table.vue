@@ -196,6 +196,9 @@ const selectChange = (selection: DIVAOData[]) => {
 </template>
 
 <style scoped lang="scss">
+* {
+  font-family: "PingFang SC";
+}
 .icon {
   cursor: pointer;
   margin-right: 10px;

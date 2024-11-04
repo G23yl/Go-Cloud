@@ -109,6 +109,7 @@ const jump = (idx: number) => {
   border-radius: $border-radius;
   display: flex;
   align-items: center;
+  font-family: "PingFang SC";
   span {
     font-weight: 1000;
     font-size: 25px;

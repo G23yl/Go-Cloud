@@ -280,7 +280,7 @@ const handleUpload = async (uploadType: string) => {
 const deleteFile = (filePath: string, fileName: string, fileID: number, type: string) => {
   // 弹窗警告
   ElMessageBox({
-    message: h("p", null, [
+    message: h("p", { style: 'font-family: "PingFang SC";' }, [
       h("span", null, "确认删除 "),
       h("div", { style: "font-size: 20px; color: #5170b8" }, fileName + " ?"),
     ]),
@@ -421,6 +421,7 @@ const download = async (filePath: string, fileName: string) => {
 }
 * {
   box-sizing: border-box;
+  font-family: "PingFang SC";
 }
 .mul-btns {
   position: fixed;

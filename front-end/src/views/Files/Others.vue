@@ -28,7 +28,7 @@ onBeforeMount(getData)
 const deleteFile = (filePath: string, fileName: string, fileID: number) => {
   // 弹窗警告
   ElMessageBox({
-    message: h("p", null, [
+    message: h("p", { style: 'font-family: "PingFang SC";' }, [
       h("span", null, "确认删除 "),
       h("div", { style: "font-size: 20px; color: #5170b8" }, fileName + " ?"),
     ]),
@@ -63,7 +63,9 @@ const deleteFile = (filePath: string, fileName: string, fileID: number) => {
 const patchDeleteFiles = (files: DIVAOData[]) => {
   // 弹窗警告
   ElMessageBox({
-    message: h("p", null, [h("span", null, `确认删除 ${files.length} 个文件吗?`)]),
+    message: h("p", { style: 'font-family: "PingFang SC";' }, [
+      h("span", null, `确认删除 ${files.length} 个文件吗?`),
+    ]),
     showCancelButton: true,
     confirmButtonText: "删除",
     cancelButtonText: "取消",

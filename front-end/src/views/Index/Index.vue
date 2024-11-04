@@ -132,6 +132,7 @@ const { donutConfig, wheelConfig } = useDataUI()
 .content {
   display: flex;
   gap: 20px;
+  font-family: "PingFang SC";
 }
 
 .upper {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import useUserStore from "@/store/user"
 import type { LoginForm } from "@/types/types"
+import { User, UserFilled } from "@element-plus/icons-vue"
 import { ElMessage, type FormInstance, type FormRules } from "element-plus"
 import { reactive, ref, useTemplateRef } from "vue"
 import { useRouter } from "vue-router"
@@ -62,7 +63,7 @@ const handleSubmit = async () => {
       router.push("/dashboard")
       ElMessage({
         type: "success",
-        message: "Login successful!",
+        message: "登录成功!",
       })
     }
   } catch (error) {
@@ -91,7 +92,7 @@ const experiment = () => {
         <div class="image-placeholder"></div>
       </div>
       <div class="login-panel">
-        <h2>Login</h2>
+        <h2>登录</h2>
         <el-form
           ref="loginFormRef"
           :model="userInfo"
@@ -102,12 +103,20 @@ const experiment = () => {
           :rules="rules"
           style="max-width: 420px; width: 100%"
         >
-          <el-form-item label="Username" prop="username">
-            <el-input v-model="userInfo.username"></el-input>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="userInfo.username"> </el-input>
           </el-form-item>
-          <el-form-item label="Password" prop="password">
+          <el-form-item label="密码" prop="password">
             <el-input v-model="userInfo.password" type="password" show-password></el-input>
           </el-form-item>
+          <el-link
+            href="#"
+            type="primary"
+            @click="experiment"
+            :underline="false"
+            style="color: #a3c2c7"
+            >忘记密码啦？</el-link
+          >
           <el-button
             type="primary"
             size="large"
@@ -115,27 +124,20 @@ const experiment = () => {
             :loading="loading"
             @click="handleSubmit"
           >
-            Login
+            登录
+            <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" style="margin-left: 5px" />
           </el-button>
         </el-form>
         <div class="footer">
-          <el-link
-            href="#"
-            type="primary"
-            @click="experiment"
-            :underline="false"
-            style="color: #a3c2c7"
-            >Forgot password?</el-link
-          >
           <div class="social-login">
-            <span>or login with</span>
+            <span>用第三方登录</span>
             <img
               src="@/assets/QQ.svg"
               alt="qq"
               style="width: 25px; cursor: pointer; margin-right: 5px"
               @click="experiment"
             />
-            <span>or</span>
+            <span></span>
             <img
               src="@/assets/wechat-fill.svg"
               alt="wechat"
@@ -144,9 +146,9 @@ const experiment = () => {
             />
           </div>
           <p>
-            Don't have an account?
+            还没有加入我们?
             <el-link href="/sign-up" type="primary" :underline="false" style="color: #a3c2c7"
-              >Create Account</el-link
+              >加入家庭</el-link
             >
           </p>
         </div>
