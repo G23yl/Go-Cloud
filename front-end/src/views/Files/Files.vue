@@ -177,6 +177,7 @@ const handleUpload = async (uploadType: string) => {
             message: `上传文件失败: ${item.file.name}`,
           })
         }
+        nextTick(getData)
       }
     })
     if (successFlg === 1) {
@@ -185,7 +186,6 @@ const handleUpload = async (uploadType: string) => {
         message: "上传成功",
       })
     }
-    nextTick(getData)
   } else {
     let successFlg = true
     // 上传文件夹

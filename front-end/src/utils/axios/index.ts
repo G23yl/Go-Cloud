@@ -7,7 +7,8 @@ import { getUser } from "../user"
 
 const request = axios.create({
   timeout: 5000,
-  baseURL: import.meta.env.VITE_APP_BASE_URL as string,
+  // baseURL: import.meta.env.VITE_APP_BASE_URL as string,
+  baseURL: "/api",
 })
 
 request.interceptors.request.use(
