@@ -150,10 +150,11 @@ const handleRemove = (filename: string) => {
 const handleUpload = async (uploadType: string) => {
   // 上传文件
   if (uploadType === "file") {
-    let successFlg = true
+    let successFlg = -1
     uploadFileList.value.forEach(async (item) => {
       // 不存在同名文件才发请求
       if (!item.existSameFile) {
+        successFlg = 1
         let formData = new FormData()
         formData.append("file", item.file)
         formData.append("filepath", query)
@@ -170,7 +171,7 @@ const handleUpload = async (uploadType: string) => {
           timeout: 120000,
         })
         if (!res) {
-          successFlg = false
+          successFlg = 0
           ElNotification({
             type: "error",
             message: `上传文件失败: ${item.file.name}`,
@@ -178,7 +179,7 @@ const handleUpload = async (uploadType: string) => {
         }
       }
     })
-    if (successFlg) {
+    if (successFlg === 1) {
       ElNotification({
         type: "success",
         message: "上传成功",
